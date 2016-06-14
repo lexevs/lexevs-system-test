@@ -3,7 +3,7 @@ BUILDDIR='/build'
 mkdir $BUILDDIR && cd $BUILDDIR
 
 # LexEVS
-git clone -b bugfix/LEXEVS-1847 https://github.com/kevinpeterson/lexevs.git && \
+git clone -b $LEXEVS_BRANCH $LEXEVS_REPO && \
     cd lexevs && \
     ant
 
@@ -19,7 +19,7 @@ cp /mysql-connector-java-5.1.37.jar /lexevs/runtime/sqlDrivers
 
 # LexEVS Remote
 cd $BUILDDIR
-git clone -b bugfix/LEXEVS-1847 https://github.com/kevinpeterson/lexevs-remote.git && \
+git clone -b $LEXEVS_REMOTE_BRANCH $LEXEVS_REMOTE_REPO && \
     cd lexevs-remote/LexEVSService && \
     cp /lexevs/runtime-components/lexbig.jar system/lib/ && \
     cp /lexevs/test/lbTest.jar test/lib/ && \
@@ -29,9 +29,9 @@ git clone -b bugfix/LEXEVS-1847 https://github.com/kevinpeterson/lexevs-remote.g
 
 # URI Resolver
 cd $BUILDDIR
-git clone --depth 1 https://github.com/cts2/URI_Resolver.git && \
+git clone --depth 1 $URI_RESOLVER_REPO && \
     cd URI_Resolver && \
-    git checkout tags/v1.0.0.FINAL && \
+    git checkout $URI_RESOLVER_TAG && \
     mvn clean install && \
     mv target/*.war /artifacts/uriresolver.war && \
     mkdir /results/uriresolver && \
