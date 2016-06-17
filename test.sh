@@ -3,11 +3,11 @@ ROOT_DIR=$(pwd)
 # Get environment variables from the command line for git branches and git repositories.  
 # Default them if they are not set.
 
-LEXEVS_BRANCH=${1:-bugfix/LEXEVS-1847}
-LEXEVS_REPO=${2:-https://github.com/kevinpeterson/lexevs.git}
+LEXEVS_BRANCH=${1:-dev}
+LEXEVS_REPO=${2:-https://github.com/lexevs/lexevs.git}
 
-LEXEVS_REMOTE_BRANCH=${3:-bugfix/LEXEVS-1847}
-LEXEVS_REMOTE_REPO=${4:-https://github.com/kevinpeterson/lexevs-remote.git}
+LEXEVS_REMOTE_BRANCH=${3:-dev}
+LEXEVS_REMOTE_REPO=${4:-https://github.com/lexevs/lexevs-remote.git}
 
 URI_RESOLVER_TAG=${5:-tags/v1.0.0.FINAL}
 URI_RESOLVER_REPO=${6:-https://github.com/cts2/URI_Resolver.git}
