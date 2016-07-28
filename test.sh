@@ -38,7 +38,7 @@ mkdir $ROOT_DIR/build/results
 mkdir $ROOT_DIR/build/lexevs
 mkdir $ROOT_DIR/build/lexevs-remote
 
-MAVEN_CONTAINER=$(docker run -d -P --name maven -v ~/.m2:/root/.m2:rw -v ~/.ivy2:/root/.ivy2:rw ubuntu)
+MAVEN_CONTAINER=$(docker run -d -P --name maven -v ~/.m2:/root/.m2:rw -v ~/.ivy2:/root/.ivy2:rw centos)
 
 cd mysql
 docker build --tag mysql .

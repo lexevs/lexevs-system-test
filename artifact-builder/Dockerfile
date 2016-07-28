@@ -1,11 +1,11 @@
 # Get the base image to Ubuntu
-FROM ubuntu:14.04
+FROM centos:7
 
-RUN apt-get update && apt-get clean
+RUN yum update && yum clean
 
-RUN apt-get install -y wget
+RUN yum install -y wget
 
-RUN apt-get install -y git
+RUN yum install -y git
 
 RUN cd / && \
     wget http://archive.apache.org/dist/ant/binaries/apache-ant-1.8.4-bin.tar.gz && \
@@ -14,9 +14,9 @@ RUN cd / && \
     sh -c 'echo ANT_HOME=/opt/ant >> /etc/environment' && \
     ln -s /opt/ant/bin/ant /usr/bin/ant
 
-RUN apt-get install -y maven
+RUN yum install -y maven
 
-RUN apt-get install -q -y openjdk-7-jre-headless openjdk-7-jdk && apt-get clean
+RUN yum install -q -y openjdk-7-jre-headless openjdk-7-jdk && yum clean
 
 ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64/
 ENV PATH $JAVA_HOME/bin:$PATH
