@@ -4,6 +4,10 @@ RUN yum -y update && yum clean all
 
 RUN yum install -y wget
 
+RUN yum install -y git
+
+RUN yum install -y maven
+
 RUN wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u92-b14/jdk-8u92-linux-x64.rpm
 
 RUN yum install -y ./jdk-8u92-linux-x64.rpm
@@ -15,3 +19,14 @@ RUN alternatives --install /usr/bin/javac javac /usr/java/latest/bin/javac 20000
 ENV JAVA_HOME /usr/java/latest
 ENV CATALINA_HOME /opt/tomcat
 ENV PATH $PATH:$JAVA_HOME/bin:$CATALINA_HOME/bin:$CATALINA_HOME/scripts
+
+ENV MAVEN_OPTS -Xmx1000m -XX:PermSize=256m
+
+ENV JAVA_TOOL_OPTIONS -Dfile.encoding=UTF8
+
+RUN cd / && \
+    wget http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.2-bin.tar.gz && \
+    tar xvfvz apache-ant-1.9.2-bin.tar.gz && \
+    mv apache-ant-1.9.2 /opt/ant && \
+    sh -c 'echo ANT_HOME=/opt/ant >> /etc/environment' && \
+    ln -s /opt/ant/bin/ant /usr/bin/ant

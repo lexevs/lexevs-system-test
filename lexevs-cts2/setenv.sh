@@ -1,6 +1,0 @@
-#! /bin/sh
-
-export CATALINA_OPTS="$CATALINA_OPTS -Xms64m"
-export CATALINA_OPTS="$CATALINA_OPTS -Xmx1024m"
-
-export CATALINA_OPTS="$CATALINA_OPTS -XX:MaxPermSize=512m"

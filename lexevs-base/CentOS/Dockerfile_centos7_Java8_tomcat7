@@ -22,3 +22,5 @@ WORKDIR /opt/tomcat
 
 EXPOSE 8080
 EXPOSE 8009
+
+ADD setenv.sh /opt/tomcat/bin/

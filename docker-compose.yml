@@ -1,18 +1,18 @@
 centos7-java8:
     build: ./lexevs-base/CentOS
     dockerfile: Dockerfile_centos7_java8
-      #args:
-       # LEXEVS_BRANCH: v6.4.0
-       # LEXEVS_REPO: https://github.com/lexevs/lexevs.git
-       # LEXEVS_REMOTE_BRANCH: v6.4.0
-       # LEXEVS_REMOTE_REPO: https://github.com/lexevs/lexevs-remote.git
-       # URI_RESOLVER_TAG: tags/v1.0.0.FINAL
-       # URI_RESOLVER_REPO: https://github.com/cts2/URI_Resolver.git
-       # LEXEVS_SERVICE_BRANCH: dev
-       # LEXEVS_SERVICE_REPO: https://github.com/cts2/lexevs-service.git
+
 centos7-java8-tomcat7:
     build: ./lexevs-base/CentOS
     dockerfile: Dockerfile_centos7_java8_tomcat7
+    links:
+      - centos7-java8
+
+mysql:
+    build: ./mysql
+
+artifact-builder:
+    build: ./artifact-builder
     links:
       - centos7-java8
 
@@ -20,6 +20,36 @@ uriresolver:
     build: ./uriresolver
     links:
       - centos7-java8-tomcat7
+      - mysql
 
+lexevs-cts2-builder:
+    build: ./lexevs-cts2-builder
+    links:
+        - artifact-builder
+        - uriresolver
 
+lexevs-testrunner:
+    build: ./lexevs-testrunner
+    links:
+       - centos7-java8
+
+lexevs-load:
+    build: ./lexevs-load
+    links:
+       - centos7-java8
+
+lexevs-remote:
+    build: ./lexevs-remote
+    links:
+        - centos7-java8-tomcat7
+
+lexevs-cts2:
+    build: ./lexevs-cts2
+    links:
+       - centos7-java8
+
+lexevs-remote-testrunner:
+    build: ./lexevs-remote-testrunner
+    links:
+       - centos7-java8
 
