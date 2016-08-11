@@ -1,4 +1,3 @@
-# Get the base image to CentOS
 FROM centos:7
 
 RUN yum install -y wget

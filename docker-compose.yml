@@ -1,0 +1,25 @@
+centos7-java8:
+    build: ./lexevs-base/CentOS
+    dockerfile: Dockerfile_centos7_java8
+      #args:
+       # LEXEVS_BRANCH: v6.4.0
+       # LEXEVS_REPO: https://github.com/lexevs/lexevs.git
+       # LEXEVS_REMOTE_BRANCH: v6.4.0
+       # LEXEVS_REMOTE_REPO: https://github.com/lexevs/lexevs-remote.git
+       # URI_RESOLVER_TAG: tags/v1.0.0.FINAL
+       # URI_RESOLVER_REPO: https://github.com/cts2/URI_Resolver.git
+       # LEXEVS_SERVICE_BRANCH: dev
+       # LEXEVS_SERVICE_REPO: https://github.com/cts2/lexevs-service.git
+centos7-java8-tomcat7:
+    build: ./lexevs-base/CentOS
+    dockerfile: Dockerfile_centos7_java8_tomcat7
+    links:
+      - centos7-java8
+
+uriresolver:
+    build: ./uriresolver
+    links:
+      - centos7-java8-tomcat7
+
+
+
