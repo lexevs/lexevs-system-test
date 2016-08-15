@@ -6,13 +6,21 @@ RUN yum install -y wget
 
 RUN yum install -y git
 
+# The following install installs ant, so no need to install ant
+# separately.
 RUN yum install -y maven
+
+# We need to install this to make sure junits tasks are executed
+# correctly in the builds
+RUN yum install -y ant-junit
+
+ENV MAVEN_OPTS -Xmx1000m -XX:PermSize=256m
 
 RUN wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u92-b14/jdk-8u92-linux-x64.rpm
 
 RUN yum install -y ./jdk-8u92-linux-x64.rpm
 
-RUN alternatives --install /usr/bin/java jar /usr/java/latest/bin/java 200000
+RUN alternatives --install /usr/bin/java java /usr/java/latest/bin/java 200000
 RUN alternatives --install /usr/bin/javaws javaws /usr/java/latest/bin/javaws 200000
 RUN alternatives --install /usr/bin/javac javac /usr/java/latest/bin/javac 200000
 
@@ -20,13 +28,8 @@ ENV JAVA_HOME /usr/java/latest
 ENV CATALINA_HOME /opt/tomcat
 ENV PATH $PATH:$JAVA_HOME/bin:$CATALINA_HOME/bin:$CATALINA_HOME/scripts
 
-ENV MAVEN_OPTS -Xmx1000m -XX:PermSize=256m
-
 ENV JAVA_TOOL_OPTIONS -Dfile.encoding=UTF8
 
-RUN cd / && \
-    wget http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.2-bin.tar.gz && \
-    tar xvfvz apache-ant-1.9.2-bin.tar.gz && \
-    mv apache-ant-1.9.2 /opt/ant && \
-    sh -c 'echo ANT_HOME=/opt/ant >> /etc/environment' && \
-    ln -s /opt/ant/bin/ant /usr/bin/ant
+
+
+

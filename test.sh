@@ -52,6 +52,18 @@ docker tag lexevssystemtest_lexevs-testrunner lexevs-testrunner
 docker tag lexevssystemtest_centos7-java8 centos7-java8
 docker tag lexevssystemtest_mysql mysql
 
+docker rmi -f lexevssystemtest_lexevs-load
+docker rmi -f lexevssystemtest_lexevs-cts2-builder
+docker rmi -f lexevssystemtest_lexevs-remote-testrunner
+docker rmi -f lexevssystemtest_artifact-builder
+docker rmi -f lexevssystemtest_lexevs-remote
+docker rmi -f lexevssystemtest_uriresolver
+docker rmi -f lexevssystemtest_centos7-java8-tomcat7
+docker rmi -f lexevssystemtest_lexevs-cts2
+docker rmi -f lexevssystemtest_lexevs-testrunner
+docker rmi -f lexevssystemtest_centos7-java8
+docker rmi -f lexevssystemtest_mysql
+
 cd mysql
 #docker build --tag mysql .
 MYSQL_CONTAINER=$(docker run -d --name mysql -e MYSQL_ROOT_PASSWORD=root mysql)
