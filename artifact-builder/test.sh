@@ -7,15 +7,15 @@ git clone -b $LEXEVS_BRANCH $LEXEVS_REPO && \
     cd lexevs && \
     ant
 
-cp -f /lbconfig.props /build/lexevs/lbPackager/antbuild/resources/config
+yes | cp -f /lbconfig.props /build/lexevs/lbPackager/antbuild/resources/config
 
-cp /mysql-connector-java-5.1.37.jar /build/lexevs/lbPackager/antbuild/runtime/sqlDrivers
+yes | cp /mysql-connector-java-5.1.37.jar /build/lexevs/lbPackager/antbuild/runtime/sqlDrivers
 
-cp -r /build/lexevs/lbPackager/antbuild/* /lexevs/
+yes | cp -r /build/lexevs/lbPackager/antbuild/* /lexevs/
 
-cp -f /lbconfig.props /lexevs/resources/config/
+yes | cp -f /lbconfig.props /lexevs/resources/config/
 
-cp /mysql-connector-java-5.1.37.jar /lexevs/runtime/sqlDrivers
+yes | cp /mysql-connector-java-5.1.37.jar /lexevs/runtime/sqlDrivers
 
 # LexEVS Remote
 cd $BUILDDIR

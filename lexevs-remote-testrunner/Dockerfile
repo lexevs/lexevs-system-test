@@ -1,4 +1,6 @@
-FROM lexevssystemtest_centos7-java8
+FROM centos7-java8
+
+RUN yum install -y ant-junit
 
 ADD test.sh /
 

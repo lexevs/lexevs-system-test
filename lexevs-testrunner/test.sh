@@ -3,7 +3,7 @@ mkdir /results/lexevs/
 
 cp -r /lexevs/* /test/
 
-cp -f /lbconfig.props /test/resources/config/
+yes | cp -f /lbconfig.props /test/resources/config/
 
 cd /test/test && \
     chmod 777 * && \

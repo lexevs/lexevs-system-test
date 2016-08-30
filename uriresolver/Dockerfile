@@ -1,4 +1,4 @@
-FROM lexevssystemtest_centos7-java8-tomcat7
+FROM centos7-java8-tomcat7
 
 ADD uriresolver.properties /root/.cts2_uri/
 

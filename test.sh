@@ -40,75 +40,57 @@ mkdir $ROOT_DIR/build/lexevs-remote
 MAVEN_CONTAINER=$(docker run -d -P --name maven -v ~/.m2:/root/.m2:rw -v ~/.ivy2:/root/.ivy2:rw centos)
 
 docker-compose up -d
-docker tag lexevssystemtest_lexevs-load lexevs-load
-docker tag lexevssystemtest_lexevs-cts2-builder lexevs-cts2-builder
-docker tag lexevssystemtest_lexevs-remote-testrunner lexevs-remote-testrunner
-docker tag lexevssystemtest_artifact-builder artifact-builder
-docker tag lexevssystemtest_lexevs-remote lexevs-remote
-docker tag lexevssystemtest_uriresolver uriresolver
-docker tag lexevssystemtest_centos7-java8-tomcat7 centos7-java8-tomcat7
-docker tag lexevssystemtest_lexevs-cts2 lexevs-cts2
-docker tag lexevssystemtest_lexevs-testrunner lexevs-testrunner
 docker tag lexevssystemtest_centos7-java8 centos7-java8
-docker tag lexevssystemtest_mysql mysql
+docker tag lexevssystemtest_centos7-java8-tomcat7 centos7-java8-tomcat7
 
-docker rmi -f lexevssystemtest_lexevs-load
-docker rmi -f lexevssystemtest_lexevs-cts2-builder
-docker rmi -f lexevssystemtest_lexevs-remote-testrunner
-docker rmi -f lexevssystemtest_artifact-builder
-docker rmi -f lexevssystemtest_lexevs-remote
-docker rmi -f lexevssystemtest_uriresolver
-docker rmi -f lexevssystemtest_centos7-java8-tomcat7
-docker rmi -f lexevssystemtest_lexevs-cts2
-docker rmi -f lexevssystemtest_lexevs-testrunner
 docker rmi -f lexevssystemtest_centos7-java8
-docker rmi -f lexevssystemtest_mysql
+docker rmi -f lexevssystemtest_centos7-java8-tomcat7
 
 cd mysql
-#docker build --tag mysql .
+docker build --tag mysql .
 MYSQL_CONTAINER=$(docker run -d --name mysql -e MYSQL_ROOT_PASSWORD=root mysql)
 MYSQL_TEST_CONTAINER=$(docker run -d --name mysql_test -e MYSQL_ROOT_PASSWORD=root mysql)
 cd ..
 
 cd artifact-builder
-#docker build -t artifact-builder .
+docker build -t artifact-builder .
 docker run --rm -v $ROOT_DIR/build/results:/results -e LEXEVS_BRANCH=$LEXEVS_BRANCH -e LEXEVS_REPO=$LEXEVS_REPO -e LEXEVS_REMOTE_BRANCH=$LEXEVS_REMOTE_BRANCH -e LEXEVS_REMOTE_REPO=$LEXEVS_REMOTE_REPO -e URI_RESOLVER_TAG=$URI_RESOLVER_TAG -e URI_RESOLVER_REPO=$URI_RESOLVER_REPO -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/lexevs-remote:/lexevs-remote -v $ROOT_DIR/build/artifacts:/artifacts --volumes-from maven --link mysql:mysql artifact-builder
 cd ..
 
 cd uriresolver
-#docker build -t uriresolver .
+docker build -t uriresolver .
 URIRESOLVER_CONTAINER=$(docker run -d --name uriresolver -p 8001:8080 -v $ROOT_DIR/build/artifacts:/artifacts --link mysql:mysql uriresolver)
 cd ..
 
 cd lexevs-cts2-builder
-#docker build -t lexevs-cts2-builder .
+docker build -t lexevs-cts2-builder .
 docker run --rm -v $ROOT_DIR/build/results:/results -e LEXEVS_SERVICE_BRANCH=$LEXEVS_SERVICE_BRANCH -e LEXEVS_SERVICE_REPO=$LEXEVS_SERVICE_REPO -v $ROOT_DIR/build/artifacts:/artifacts --volumes-from maven -e "uriResolutionServiceUrl=http://uriresolver:8080/uriresolver/" --link uriresolver:uriresolver lexevs-cts2-builder
 cd ..
 
 cd lexevs-testrunner
-#docker build -t lexevs-testrunner .
+docker build -t lexevs-testrunner .
 docker run --rm -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/results:/results --link mysql_test:mysql_test lexevs-testrunner
 docker stop $MYSQL_TEST_CONTAINER
 docker rm $MYSQL_TEST_CONTAINER
 cd ..
 
 cd lexevs-load
-#docker build -t lexevs-load .
+docker build -t lexevs-load .
 docker run --rm -v $ROOT_DIR/build/lexevs:/lexevs --link mysql:mysql lexevs-load
 cd ..
 
 cd lexevs-remote
-#docker build -t lexevs-remote .
+docker build -t lexevs-remote .
 LEXEVS_REMOTE_CONTAINER=$(docker run -d --name lexevs-remote -p 8000:8080 -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/artifacts:/artifacts --link mysql:mysql lexevs-remote)
 cd ..
 
 cd lexevs-cts2
-#docker build -t lexevs-cts2 .
+docker build -t lexevs-cts2 .
 LEXEVS_CTS2_CONTAINER=$(docker run -d -p 8002:8080 -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/artifacts:/artifacts --link mysql:mysql --link uriresolver:uriresolver lexevs-cts2)
 cd ..
 
 cd lexevs-remote-testrunner
-#docker build -t lexevs-remote-testrunner .
+docker build -t lexevs-remote-testrunner .
 docker run --rm -v $ROOT_DIR/build/lexevs-remote:/lexevs-remote -v $ROOT_DIR/build/results:/results --link lexevs-remote:lexevs-remote lexevs-remote-testrunner
 cd ..
 
