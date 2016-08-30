@@ -1,0 +1,30 @@
+FROM lexevssystemtest_centos7-java8
+
+ENV CATALINA_HOME /opt/tomcat
+
+# Install Tomcat
+RUN wget http://apache-mirror.rbc.ru/pub/apache/tomcat/tomcat-7/v7.0.70/bin/apache-tomcat-7.0.70.tar.gz && \
+	tar -xvf apache-tomcat-7.0.70.tar.gz && \
+	rm apache-tomcat*.tar.gz && \
+	mv apache-tomcat* ${CATALINA_HOME}
+
+RUN chmod +x ${CATALINA_HOME}/bin/*sh
+ENV PATH $PATH:$CATALINA_HOME/bin:$CATALINA_HOME/scripts
+
+# Create Tomcat admin user
+ADD create_admin_user.sh $CATALINA_HOME/scripts/create_admin_user.sh
+#ADD tomcat.sh $CATALINA_HOME/scripts/tomcat.sh
+RUN chmod +x $CATALINA_HOME/scripts/*.sh
+
+# Create tomcat user
+RUN groupadd -r tomcat && \
+	useradd -g tomcat -d ${CATALINA_HOME} -s /sbin/nologin  -c "Tomcat user" tomcat && \
+	chown -R tomcat:tomcat ${CATALINA_HOME}
+
+WORKDIR /opt/tomcat
+
+EXPOSE 8080
+EXPOSE 8000
+EXPOSE 8001
+
+ADD setenv.sh /opt/tomcat/bin/

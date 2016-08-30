@@ -29,7 +29,6 @@ echo LEXEVS_SERVICE_BRANCH : $LEXEVS_SERVICE_BRANCH
 echo LEXEVS_SERVICE_REPO   : $LEXEVS_SERVICE_REPO
 echo
 
-
 rm -rf $ROOT_DIR/build
 
 mkdir $ROOT_DIR/build
@@ -39,6 +38,13 @@ mkdir $ROOT_DIR/build/lexevs
 mkdir $ROOT_DIR/build/lexevs-remote
 
 MAVEN_CONTAINER=$(docker run -d -P --name maven -v ~/.m2:/root/.m2:rw -v ~/.ivy2:/root/.ivy2:rw centos)
+
+docker-compose up -d
+docker tag lexevssystemtest_centos7-java8 centos7-java8
+docker tag lexevssystemtest_centos7-java8-tomcat7 centos7-java8-tomcat7
+
+docker rmi -f lexevssystemtest_centos7-java8
+docker rmi -f lexevssystemtest_centos7-java8-tomcat7
 
 cd mysql
 docker build --tag mysql .

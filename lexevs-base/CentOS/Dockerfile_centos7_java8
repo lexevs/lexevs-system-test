@@ -1,0 +1,34 @@
+FROM centos:centos7
+
+# Default to UTF-8 file.encoding
+ENV LC_ALL en_US.UTF-8
+
+ENV JAVA_VERSION 8u92
+ENV RPM_VERSION 8u92-b14
+
+# - install java8 jdk
+RUN yum install -y wget && \
+    wget \
+      --no-cookies \
+      --no-check-certificate \
+      --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" \
+      "http://download.oracle.com/otn-pub/java/jdk/${RPM_VERSION}/jdk-${JAVA_VERSION}-linux-x64.rpm" && \
+    yum localinstall -y "jdk-${JAVA_VERSION}-linux-x64.rpm" && \
+    rm -f "jdk-${JAVA_VERSION}-linux-x64.rpm"
+
+RUN yum install -y maven
+
+RUN alternatives --install /usr/bin/java java /usr/java/latest/bin/java 200000
+RUN alternatives --install /usr/bin/javaws javaws /usr/java/latest/bin/javaws 200000
+RUN alternatives --install /usr/bin/javac javac /usr/java/latest/bin/javac 200000
+
+ENV JAVA_HOME /usr/java/latest
+
+ENV PATH $JAVA_HOME/bin:$PATH
+
+ENV JAVA_TOOL_OPTIONS -Dfile.encoding=UTF8
+ENV MAVEN_OPTS -Xmx1000m -XX:PermSize=256m
+
+RUN yum install -y git
+
+

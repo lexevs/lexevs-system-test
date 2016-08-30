@@ -1,0 +1,9 @@
+centos7-java8:
+    build: ./lexevs-base/CentOS
+    dockerfile: Dockerfile_centos7_java8
+
+centos7-java8-tomcat7:
+    build: ./lexevs-base/CentOS
+    dockerfile: Dockerfile_centos7_java8_tomcat7
+    links:
+      - centos7-java8
