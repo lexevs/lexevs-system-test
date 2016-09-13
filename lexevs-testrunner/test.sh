@@ -10,3 +10,5 @@ cd /test/test && \
     sh TestRunner.sh -x
 
 cp -R report.* /results/lexevs/
+
+cp -R ../logs/*.txt /results/lexevs/

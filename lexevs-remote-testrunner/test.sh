@@ -6,4 +6,4 @@ ant
 
 mkdir /results/remote-api/
 
-cp -R reports/* /results/remote-api/
+yes | cp -R reports/* /results/remote-api/
