@@ -6,6 +6,10 @@ Docker based strategy for building, deploying, and testing lexevs, lexevs-remote
 ## prerequisites
 [Docker](https://docs.docker.com/) must be installed to run the LexEVS System Tests. 
 
+## Environment
+Operating System: __CentOS 7__  
+Java Environment: __JDK 1.8__ (102 Build b14)
+
 ## Usage
 * Clone this repository.  
 * CD to lexevs-system-test
@@ -14,7 +18,7 @@ Docker based strategy for building, deploying, and testing lexevs, lexevs-remote
 Run the system tests, using all default git branches and repositories.
 
 ```
-.\test.sh
+./test.sh
 ```
 Git branches and repositories can be passed in when running the test script.  
 Note: Either specify all git branches and repositories or none (leave blank).
@@ -32,5 +36,5 @@ The following is the specific order of the parameters that need to passed in:
 Example call: Run the system tests, specifying the git branches and repositories:
 
 ```
-.\test.sh dev https://github.com/lexevs/lexevs.git dev https://github.com/lexevs/lexevs-remote.git tags/v1.0.0.FINAL https://github.com/cts2/URI_Resolver.git dev https://github.com/cts2/lexevs-service.git
+./test.sh dev https://github.com/lexevs/lexevs.git dev https://github.com/lexevs/lexevs-remote.git tags/v1.0.0.FINAL https://github.com/cts2/URI_Resolver.git dev https://github.com/cts2/lexevs-service.git
 ```
