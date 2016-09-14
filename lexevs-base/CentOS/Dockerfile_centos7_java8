@@ -3,8 +3,8 @@ FROM centos:centos7
 # Default to UTF-8 file.encoding
 ENV LC_ALL en_US.UTF-8
 
-ENV JAVA_VERSION 8u92
-ENV RPM_VERSION 8u92-b14
+ENV JAVA_VERSION 8u102
+ENV RPM_VERSION 8u102-b14
 
 # - install java8 jdk
 RUN yum install -y wget && \
@@ -30,5 +30,7 @@ ENV JAVA_TOOL_OPTIONS -Dfile.encoding=UTF8
 ENV MAVEN_OPTS -Xmx1000m -XX:PermSize=256m
 
 RUN yum install -y git
+
+RUN yum install -y ant-junit
 
 
