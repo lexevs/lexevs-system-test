@@ -31,4 +31,6 @@ ENV MAVEN_OPTS -Xmx1000m -XX:PermSize=256m
 
 RUN yum install -y git
 
+RUN yum install -y ant-junit
+
 

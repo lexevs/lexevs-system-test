@@ -1,4 +1,4 @@
-mv /Test.properties /lexevs-remote/LexEVSService/test/resources
+yes | mv /Test.properties /lexevs-remote/LexEVSService/test/resources
 
 cd /lexevs-remote/LexEVSService/test
 
