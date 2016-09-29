@@ -3,8 +3,8 @@ FROM lexevssystemtest_centos7-java8
 ENV CATALINA_HOME /opt/tomcat
 
 # Install Tomcat
-RUN wget http://apache-mirror.rbc.ru/pub/apache/tomcat/tomcat-7/v7.0.70/bin/apache-tomcat-7.0.70.tar.gz && \
-	tar -xvf apache-tomcat-7.0.70.tar.gz && \
+RUN wget http://www-us.apache.org/dist/tomcat/tomcat-7/v7.0.72/bin/apache-tomcat-7.0.72.tar.gz && \
+	tar -xvf apache-tomcat-7.0.72.tar.gz && \
 	rm apache-tomcat*.tar.gz && \
 	mv apache-tomcat* ${CATALINA_HOME}
 
