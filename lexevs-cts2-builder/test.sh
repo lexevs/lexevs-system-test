@@ -2,6 +2,8 @@ BUILDDIR='/build'
 
 mkdir $BUILDDIR && cd $BUILDDIR
 
+export MAVEN_OPTS="-Dhttps.protocols=TLSv1.1,TLSv1.2 -Dforce.http.jre.executor=true -Xmx3072m -XX:MaxPermSize=752m"
+
 # LexEVS CTS2
 cd $BUILDDIR
 git clone -b $LEXEVS_SERVICE_BRANCH $LEXEVS_SERVICE_REPO && \
