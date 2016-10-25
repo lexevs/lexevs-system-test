@@ -1,4 +1,4 @@
-FROM java:openjdk-7-jdk
+FROM java:openjdk-8-jdk
 
 RUN cd / && \
     wget http://archive.apache.org/dist/ant/binaries/apache-ant-1.8.4-bin.tar.gz && \
