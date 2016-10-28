@@ -32,9 +32,8 @@ git clone -b $LEXEVS_REMOTE_BRANCH $LEXEVS_REMOTE_REPO && \
 
 # URI Resolver
 cd $BUILDDIR
-git clone --depth 1 $URI_RESOLVER_REPO && \
+git clone -b $URI_RESOLVER_BRANCH $URI_RESOLVER_REPO && \
     cd URI_Resolver && \
-    git checkout $URI_RESOLVER_TAG && \
     mvn clean install && \
     mv target/*.war /artifacts/uriresolver.war && \
     mkdir /results/uriresolver && \

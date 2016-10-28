@@ -9,7 +9,7 @@ LEXEVS_REPO=${2:-https://github.com/lexevs/lexevs.git}
 LEXEVS_REMOTE_BRANCH=${3:-dev}
 LEXEVS_REMOTE_REPO=${4:-https://github.com/lexevs/lexevs-remote.git}
 
-URI_RESOLVER_TAG=${5:-tags/v1.0.0.FINAL}
+URI_RESOLVER_BRANCH=${5:-v1.0.0}
 URI_RESOLVER_REPO=${6:-https://github.com/cts2/URI_Resolver.git}
 
 LEXEVS_SERVICE_BRANCH=${7:-dev}
@@ -22,8 +22,8 @@ echo
 echo LEXEVS_REMOTE_BRANCH : $LEXEVS_REMOTE_BRANCH
 echo LEXEVS_REMOTE_REPO   : $LEXEVS_REMOTE_REPO
 echo
-echo URI_RESOLVER_TAG  : $URI_RESOLVER_TAG
-echo URI_RESOLVER_REPO : $URI_RESOLVER_REPO
+echo URI_RESOLVER_BRANCH  : $URI_RESOLVER_BRANCH
+echo URI_RESOLVER_REPO    : $URI_RESOLVER_REPO
 echo
 echo LEXEVS_SERVICE_BRANCH : $LEXEVS_SERVICE_BRANCH
 echo LEXEVS_SERVICE_REPO   : $LEXEVS_SERVICE_REPO
@@ -48,7 +48,7 @@ cd ..
 
 cd artifact-builder
 docker build -t artifact-builder .
-docker run --rm -v $ROOT_DIR/build/results:/results -e LEXEVS_BRANCH=$LEXEVS_BRANCH -e LEXEVS_REPO=$LEXEVS_REPO -e LEXEVS_REMOTE_BRANCH=$LEXEVS_REMOTE_BRANCH -e LEXEVS_REMOTE_REPO=$LEXEVS_REMOTE_REPO -e URI_RESOLVER_TAG=$URI_RESOLVER_TAG -e URI_RESOLVER_REPO=$URI_RESOLVER_REPO -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/lexevs-remote:/lexevs-remote -v $ROOT_DIR/build/artifacts:/artifacts --volumes-from maven --link mysql:mysql artifact-builder
+docker run --rm -v $ROOT_DIR/build/results:/results -e LEXEVS_BRANCH=$LEXEVS_BRANCH -e LEXEVS_REPO=$LEXEVS_REPO -e LEXEVS_REMOTE_BRANCH=$LEXEVS_REMOTE_BRANCH -e LEXEVS_REMOTE_REPO=$LEXEVS_REMOTE_REPO -e URI_RESOLVER_BRANCH=$URI_RESOLVER_BRANCH -e URI_RESOLVER_REPO=$URI_RESOLVER_REPO -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/lexevs-remote:/lexevs-remote -v $ROOT_DIR/build/artifacts:/artifacts --volumes-from maven --link mysql:mysql artifact-builder
 cd ..
 
 cd uriresolver
