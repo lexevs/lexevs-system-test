@@ -8,9 +8,9 @@ RUN apt-get install -y wget
 RUN apt-get install -y git
 
 RUN cd / && \
-    wget http://archive.apache.org/dist/ant/binaries/apache-ant-1.8.4-bin.tar.gz && \
-    tar xvfvz apache-ant-1.8.4-bin.tar.gz && \
-    mv apache-ant-1.8.4 /opt/ant && \
+    wget http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.3-bin.tar.gz && \
+    tar xvfvz apache-ant-1.9.3-bin.tar.gz && \
+    mv apache-ant-1.9.3 /opt/ant && \
     sh -c 'echo ANT_HOME=/opt/ant >> /etc/environment' && \
     ln -s /opt/ant/bin/ant /usr/bin/ant
 
@@ -18,7 +18,10 @@ RUN apt-get install -y maven
 
 RUN apt-get install -q -y openjdk-8-jre-headless openjdk-8-jdk && apt-get clean
 
+ENV ANT_HOME=/opt/ant
+
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/
+
 ENV PATH $JAVA_HOME/bin:$PATH
 
 ENV JAVA_TOOL_OPTIONS -Dfile.encoding=UTF8
