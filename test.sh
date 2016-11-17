@@ -41,9 +41,10 @@ mkdir $ROOT_DIR/build/lexevs-remote
 MAVEN_CONTAINER=$(docker run -d -P --name maven -v ~/.m2:/root/.m2:rw -v ~/.ivy2:/root/.ivy2:rw ubuntu)
 
 cd mysql
-docker build --tag mysql .
-MYSQL_CONTAINER=$(docker run -d --name mysql -e MYSQL_ROOT_PASSWORD=root mysql)
-MYSQL_TEST_CONTAINER=$(docker run -d --name mysql_test -e MYSQL_ROOT_PASSWORD=root mysql)
+docker pull mysql:5.5
+docker build --tag mysql:5.5 .
+MYSQL_CONTAINER=$(docker run -d --name mysql -e MYSQL_ROOT_PASSWORD=root mysql:5.5)
+MYSQL_TEST_CONTAINER=$(docker run -d --name mysql_test -e MYSQL_ROOT_PASSWORD=root mysql:5.5)
 cd ..
 
 cd artifact-builder
