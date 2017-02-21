@@ -26,6 +26,8 @@ chmod 777 *
 
 ./LoadLgXML.sh -in ../test/resources/testData/valueDomain/vdTestData.xml
 
+./LoadLgXML.sh -in ../test/resources/testData/valueDomain/VDForOneChild.xml
+
 ./LoadResolvedValueSetDefinition.sh -u "SRITEST:AUTO:AllDomesticButGM" -a
 
 ./LoadResolvedValueSetDefinition.sh -u "SRITEST:AUTO:AllDomesticButGMWithlt250charName" -a
