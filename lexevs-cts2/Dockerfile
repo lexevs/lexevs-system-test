@@ -1,5 +1,5 @@
 # Get the base image to Ubuntu
-FROM tomcat:7.0.67-jre8
+FROM tomcat:8.5.11-jre8
 
 ADD setenv.sh /usr/local/tomcat/bin/
 
