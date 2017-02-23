@@ -1,5 +1,5 @@
 # Get the base image to Ubuntu
-FROM tomcat:8.5.11-jre8
+FROM tomcat:8.0.41-jre8
 
 VOLUME /artifacts
 
