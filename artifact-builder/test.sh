@@ -27,7 +27,7 @@ git clone -b $LEXEVS_REMOTE_BRANCH $LEXEVS_REMOTE_REPO && \
     cp /lexevs/runtime-components/lexbig.jar system/lib/ && \
     cp /lexevs/test/lbTest.jar test/lib/ && \
     ant && \
-    mv output/lexevsapi64/package/webapp/*.tomcat.war /artifacts/lexevsapi64.war && \
+    mv output/lexevsapi65/package/webapp/*.tomcat.war /artifacts/lexevsapi65.war && \
     cp -r ../* /lexevs-remote/
 
 # URI Resolver
