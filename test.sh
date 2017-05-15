@@ -81,8 +81,15 @@ cd ..
 
 cd lexevs-cts2
 docker build -t lexevs-cts2 .
-LEXEVS_CTS2_CONTAINER=$(docker run -d -p 8002:8080 -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/artifacts:/artifacts --link mysql:mysql --link uriresolver:uriresolver lexevs-cts2)
+LEXEVS_CTS2_CONTAINER=$(docker run -d --name lexevs-cts2 -p 8002:8080 -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/artifacts:/artifacts --link mysql:mysql --link uriresolver:uriresolver lexevs-cts2)
 cd ..
+
+
+cd lexevs-cts2-testrunner
+docker build -t lexevs-cts2-testrunner .
+#docker run --rm -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/results:/results lexevs-cts2-testrunner
+LEXEVS_CTS2_REST_TEST_CONTAINER=$(docker run -d --name lexevs-cts2-testrunner -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/results:/results --link lexevs-cts2:lexevs-cts2 lexevs-cts2-testrunner)
+
 
 cd lexevs-remote-testrunner
 docker build -t lexevs-remote-testrunner .
@@ -94,9 +101,11 @@ docker stop $URIRESOLVER_CONTAINER
 docker stop $LEXEVS_REMOTE_CONTAINER
 docker stop $MAVEN_CONTAINER
 docker stop $MYSQL_CONTAINER
+docker stop $LEXEVS_CTS2_REST_TEST_CONTAINER
 
 docker rm $LEXEVS_CTS2_CONTAINER
 docker rm $URIRESOLVER_CONTAINER
 docker rm $LEXEVS_REMOTE_CONTAINER
 docker rm $MAVEN_CONTAINER
 docker rm $MYSQL_CONTAINER
+docker rm $LEXEVS_CTS2_REST_TEST_CONTAINER
