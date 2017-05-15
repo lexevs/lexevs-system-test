@@ -9,6 +9,5 @@ RUN apt-get update  && \
 	
 ADD test.sh /
 ADD cts2Calls_spec.js /
-ADD test_spec.js /
 
 CMD sh /test.sh 
