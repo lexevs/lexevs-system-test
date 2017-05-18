@@ -88,6 +88,7 @@ cd ..
 cd lexevs-cts2-testrunner
 docker build -t lexevs-cts2-testrunner .
 docker run --rm -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/results:/results --link lexevs-cts2:lexevs-cts2 lexevs-cts2-testrunner
+cd ..
 
 cd lexevs-remote-testrunner
 docker build -t lexevs-remote-testrunner .
