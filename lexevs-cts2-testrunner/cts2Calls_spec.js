@@ -8,7 +8,7 @@
 // using the content that is loaded during the lexevs-load.
 
 var frisby = require('frisby');
-var cts2Version = '1.3.1.FINAL';
+var cts2Version = '1.3.3.FINAL';
 
 // Get the parameter passed in from the command line
 //var baseURL = 'http://localhost:8181/cts2/';
