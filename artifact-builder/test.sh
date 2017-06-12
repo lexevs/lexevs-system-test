@@ -2,6 +2,9 @@ BUILDDIR='/build'
 
 mkdir $BUILDDIR && cd $BUILDDIR
 
+export MAVEN_OPTS="-Dhttps.protocols=TLSv1.1,TLSv1.2 -Dforce.http.jre.executor=true -Xmx3072m -XX:MaxPermSize=752m"
+export ANT_OPTS="-Dhttps.protocols=TLSv1.1,TLSv1.2 -Dforce.http.jre.executor=true -Xmx3072m -XX:MaxPermSize=752m"
+ 
 # LexEVS
 git clone -b $LEXEVS_BRANCH $LEXEVS_REPO && \
     cd lexevs && \
@@ -24,14 +27,13 @@ git clone -b $LEXEVS_REMOTE_BRANCH $LEXEVS_REMOTE_REPO && \
     cp /lexevs/runtime-components/lexbig.jar system/lib/ && \
     cp /lexevs/test/lbTest.jar test/lib/ && \
     ant && \
-    mv output/lexevsapi64/package/webapp/*.tomcat.war /artifacts/lexevsapi64.war && \
+    mv output/lexevsapi65/package/webapp/*.tomcat.war /artifacts/lexevsapi65.war && \
     cp -r ../* /lexevs-remote/
 
 # URI Resolver
 cd $BUILDDIR
-git clone --depth 1 $URI_RESOLVER_REPO && \
+git clone -b $URI_RESOLVER_BRANCH $URI_RESOLVER_REPO && \
     cd URI_Resolver && \
-    git checkout $URI_RESOLVER_TAG && \
     mvn clean install && \
     mv target/*.war /artifacts/uriresolver.war && \
     mkdir /results/uriresolver && \
