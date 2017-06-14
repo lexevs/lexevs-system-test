@@ -23,7 +23,6 @@ LEXEVS_SERVICE_REPO=${8:-https://github.com/cts2/lexevs-service.git}
 NCI_DOCKER_USER=${9}
 NCI_DOCKER_PW=${10}
 
-
 echo
 echo LEXEVS_BRANCH : $LEXEVS_BRANCH
 echo LEXEVS_REPO   : $LEXEVS_REPO
@@ -38,8 +37,31 @@ echo LEXEVS_SERVICE_BRANCH : $LEXEVS_SERVICE_BRANCH
 echo LEXEVS_SERVICE_REPO   : $LEXEVS_SERVICE_REPO
 echo
 echo NCI_DOCKER_USER       : $NCI_DOCKER_USER
-echo NCI_DOCKER_PW         : <hidden>
+echo
 
+# Verify that the NCI Nexus user name is passed in.  Exit if it is not set.
+if [ -z "$NCI_DOCKER_USER" ]; 
+	then echo "NCI_DOCKER_USER is no set. Exiting.";
+	exit;	
+fi
+
+# Verify that the NCI Nexus password is passed in.  Exit if it is not set.
+if [ -z "$NCI_DOCKER_PW" ]; 
+	then echo "NCI_DOCKER_PW is no set. Exiting."; 
+	exit;
+fi
+
+# Log in to NCI Nexus Docker hub
+LOGIN_RESULT="$(docker login -u $NCI_DOCKER_USER -p $NCI_DOCKER_PW ncidockerhub.nci.nih.gov)"
+
+echo 
+echo $LOGIN_RESULT
+
+# If the login result doesn't contain the following text, then exit.
+if [[ $LOGIN_RESULT != *"Succeeded"* ]];
+	then echo "NCI Nexus Docker login failed . Exiting.";
+	exit;
+fi
 
 rm -rf $ROOT_DIR/build
 
@@ -95,7 +117,6 @@ docker build -t lexevs-cts2 .
 LEXEVS_CTS2_CONTAINER=$(docker run -d --name lexevs-cts2 -p 8002:8080 -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/artifacts:/artifacts --link mysql:mysql --link uriresolver:uriresolver lexevs-cts2)
 cd ..
 
-
 cd lexevs-cts2-testrunner
 docker build -t lexevs-cts2-testrunner .
 docker run --rm -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/results:/results --link lexevs-cts2:lexevs-cts2 lexevs-cts2-testrunner
@@ -105,6 +126,12 @@ cd lexevs-remote-testrunner
 docker build -t lexevs-remote-testrunner .
 docker run --rm -v $ROOT_DIR/build/lexevs-remote:/lexevs-remote -v $ROOT_DIR/build/results:/results --link lexevs-remote:lexevs-remote lexevs-remote-testrunner
 cd ..
+
+echo
+echo Logging out of NCI Nexus Docker hub
+echo 
+
+docker logout ncidockerhub.nci.nih.gov
 
 docker stop $LEXEVS_CTS2_CONTAINER
 docker stop $URIRESOLVER_CONTAINER
