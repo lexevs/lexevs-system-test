@@ -1,5 +1,5 @@
 # Get the base image to Ubuntu
-FROM tomcat:8.5.11-jre8
+FROM ncidockerhub.nci.nih.gov/lexevs/nci-tomcat:8.5.15-jre8
 
 ADD setenv.sh /usr/local/tomcat/bin/
 

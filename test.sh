@@ -2,6 +2,11 @@ ROOT_DIR=$(pwd)
 
 # Get environment variables from the command line for git branches and git repositories.  
 # Default them if they are not set.
+#
+# Get environment variables from the command line for the user and pw pass of the NCI Nexus server (internal Docker hub).
+# This will allow the script to log in and pull Docker images stored on the NCI Nexus Server.
+# 
+# Note: This script will need to be run behind the NCI Firewall/on VPN to successfully log in and pull these internal Docker images. 
 
 LEXEVS_BRANCH=${1:-dev}
 LEXEVS_REPO=${2:-https://github.com/lexevs/lexevs.git}
@@ -14,6 +19,10 @@ URI_RESOLVER_REPO=${6:-https://github.com/cts2/URI_Resolver.git}
 
 LEXEVS_SERVICE_BRANCH=${7:-dev}
 LEXEVS_SERVICE_REPO=${8:-https://github.com/cts2/lexevs-service.git}
+
+NCI_DOCKER_USER=${9}
+NCI_DOCKER_PW=${10}
+
 
 echo
 echo LEXEVS_BRANCH : $LEXEVS_BRANCH
@@ -28,6 +37,8 @@ echo
 echo LEXEVS_SERVICE_BRANCH : $LEXEVS_SERVICE_BRANCH
 echo LEXEVS_SERVICE_REPO   : $LEXEVS_SERVICE_REPO
 echo
+echo NCI_DOCKER_USER       : $NCI_DOCKER_USER
+echo NCI_DOCKER_PW         : <hidden>
 
 
 rm -rf $ROOT_DIR/build
@@ -41,10 +52,10 @@ mkdir $ROOT_DIR/build/lexevs-remote
 MAVEN_CONTAINER=$(docker run -d -P --name maven -v ~/.m2:/root/.m2:rw -v ~/.ivy2:/root/.ivy2:rw ubuntu)
 
 cd mysql
-docker pull mysql:5.5
-docker build --tag mysql:5.5 .
-MYSQL_CONTAINER=$(docker run -d --name mysql -e MYSQL_ROOT_PASSWORD=root mysql:5.5)
-MYSQL_TEST_CONTAINER=$(docker run -d --name mysql_test -e MYSQL_ROOT_PASSWORD=root mysql:5.5)
+docker pull ncidockerhub.nci.nih.gov/lexevs/nci-mysql:5.6.33
+docker build --tag mysql:5.6.33 .
+MYSQL_CONTAINER=$(docker run -d --name mysql -e MYSQL_ROOT_PASSWORD=root mysql:5.6.33)
+MYSQL_TEST_CONTAINER=$(docker run -d --name mysql_test -e MYSQL_ROOT_PASSWORD=root mysql:5.6.33)
 cd ..
 
 cd artifact-builder
