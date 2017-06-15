@@ -47,7 +47,7 @@ fi
 
 # Verify that the NCI Nexus password is passed in.  Exit if it is not set.
 if [ -z "$NCI_DOCKER_PW" ]; 
-	then echo "NCI_DOCKER_PW is no set. Exiting."; 
+	then echo "NCI_DOCKER_PW is not set. Exiting."; 
 	exit;
 fi
 
