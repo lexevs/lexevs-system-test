@@ -1,4 +1,4 @@
-FROM mysql:5.6
+FROM ncidockerhub.nci.nih.gov/lexevs/nci-mysql:5.6.33
 
 VOLUME /var/lib/mysql
 
