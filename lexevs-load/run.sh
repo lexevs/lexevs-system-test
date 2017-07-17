@@ -12,7 +12,7 @@ chmod 777 *
 
 ./LoadOWL2.sh -in ../test/resources/testData/camera.owl -a
 
-./LoadOWL2.sh -in ../test/resources/testData/owl2/owl2-test-cases-Primitive-Annotated.owl -a
+./LoadOWL2.sh -in ../test/resources/testData/owl2/owl2-special-cases-Defined-Annotated.owl -a
 
 ./LoadOBO.sh -in ../test/resources/testData/cell.obo -a
 
