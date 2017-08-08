@@ -32,6 +32,8 @@ chmod 777 *
 
 ./LoadResolvedValueSetDefinition.sh -u "SRITEST:AUTO:AllDomesticButGMWithlt250charName" -a
 
+./LoadResolvedValueSetDefinition.sh -u "XTEST:One.Node.ValueSet" -a
+
 ./LoadLgXML.sh -in ../test/resources/testData/valueDomain/VSD_OWL2Annotations.xml -a
 
 ./SupplementScheme.sh -r -parentUri "urn:oid:11.11.0.1" -parentVersion "1.0" -supplementUri "urn:oid:11.11.0.1.1-extension" -supplementVersion "1.0-extension"
