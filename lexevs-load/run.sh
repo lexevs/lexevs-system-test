@@ -28,11 +28,11 @@ chmod 777 *
 
 ./LoadLgXML.sh -in ../test/resources/testData/valueDomain/VDForOneChild.xml
 
-./LoadResolvedValueSetDefinition.sh -u "SRITEST:AUTO:AllDomesticButGM" -a
+./LoadResolvedValueSetDefinition.sh -u "SRITEST:AUTO:AllDomesticButGM" -vsVersion "12.03test" -a
 
 ./LoadResolvedValueSetDefinition.sh -u "SRITEST:AUTO:AllDomesticButGMWithlt250charName" -a
 
-./LoadResolvedValueSetDefinition.sh -u "XTEST:One.Node.ValueSet" -a
+./LoadResolvedValueSetDefinition.sh -u "XTEST:One.Node.ValueSet" -vsVersion "1.0" -a
 
 ./LoadLgXML.sh -in ../test/resources/testData/valueDomain/VSD_OWL2Annotations.xml -a
 
