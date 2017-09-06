@@ -16,7 +16,7 @@ var cts2Version = '1.3.3.FINAL';
 //var baseURL = 'http://localhost:8888/cts2_65/';
 var baseURL = process.env['baseURL'];
 console.log("Working with CTS2 baseURL:" + baseURL);
-console.log("Testing new version of jasmine");
+
 
 describe('CTS2 integration tests', function() {
 
@@ -644,6 +644,19 @@ describe('CTS2 integration tests', function() {
            	 	resourceName: 'Automobiles:005',
            	 	resourceName: 'Automobiles:Ford',
            	 	resourceName: 'Automobiles_Different_NS:C0002',
+         	})
+         	.expect('json', 'MapEntryDirectory.entry.*.map', {
+           	 	content: 'Mapping Sample',
+				href: baseURL + 'map/Mapping Sample'
+         	})
+         	.expect('json', 'MapEntryDirectory.entry.*.mapFrom', {
+           	 	uri: 'urn:oid:11.11.0.1:Jaguar',
+           	 	namespace: 'Automobiles',
+           	 	name: 'Jaguar',
+           	 	
+           	 	uri: 'urn:oid:11.11.0.1:A0001',
+           	 	namespace: 'Automobiles',
+           	 	name: 'A0001',
          	})
 	    	.done(done);
 		});
