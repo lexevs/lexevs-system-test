@@ -8,409 +8,688 @@
 // using the content that is loaded during the lexevs-load.
 
 var frisby = require('frisby');
+const Joi = frisby.Joi; // Frisby exposes Joi for convenience
+
 var cts2Version = '1.3.3.FINAL';
 
 // Get the parameter passed in from the command line
-//var baseURL = 'http://localhost:8181/cts2/';
+//var baseURL = 'http://localhost:8888/cts2_65/';
 var baseURL = process.env['baseURL'];
 console.log("Working with CTS2 baseURL:" + baseURL);
+
+
+describe('CTS2 integration tests', function() {
 
 //*********************************************************************
 // service
 //*********************************************************************
-frisby.create('CTS2 REST call: service')
-  .get(baseURL + 'service?format=json')
-  .expectStatus(200)
-  .expectHeaderContains('content-type', 'charset=utf-8')
-  .expectBodyContains(cts2Version)
-  .expectJSONLength('BaseService.supportedProfile',14)
-  .expectJSON('BaseService.supportedProfile.?', {
-    structuralProfile:"SP_VALUE_SET_DEFINITION",
-    structuralProfile:"SP_VALUE_SET",
-    structuralProfile:"SP_MAP_VERSION"
-   })
- .toss();
+	it('CTS2 REST call: service', function (done) {
+	  frisby.get(baseURL + 'service?format=json')
+	    .expect('status', 200)
+	    .expect('jsonTypes', 'BaseService', {
+            serviceName: Joi.string(),
+            serviceVersion: Joi.string(),
+            implementationType: Joi.string()
+         })
+	    .expect('json', 'BaseService', {
+            serviceVersion: cts2Version
+         })
+         .expect('json', 'BaseService.supportedProfile.?', {
+            structuralProfile:"SP_VALUE_SET_DEFINITION",
+    		structuralProfile:"SP_VALUE_SET",
+   			structuralProfile:"SP_MAP_VERSION"
+         })
+	    .done(done);
+	});
 
 //*********************************************************************
 // Count entities
 //*********************************************************************
-frisby.create('CTS2 REST call: entities count')
-  .head(baseURL + 'entities')
-  .expectStatus(200)
-  //.inspectHeaders()
- .toss();
+// 	it('CTS2 REST call: count entities', function (done) {
+// 	  	frisby.get(baseURL + 'entities')
+// 	    	.expect('status', 200)
+// 	    	.done(done);
+// 		});
 
 //*********************************************************************
 // entities - search (all)
 //*********************************************************************
-frisby.create('CTS2 REST call: entities search (all)')
-  .get(baseURL + 'entities?maxtoreturn=50&format=json')
-  .expectStatus(200)
-  .expectHeaderContains('content-type', 'charset=utf-8')
-  .expectJSONLength('EntityDirectory.entry',50)
- .toss();
+	it('CTS2 REST call: entities - search (all)', function (done) {
+	  	frisby.get(baseURL + 'entities?maxtoreturn=50&format=json')
+	    	.expect('status', 200)
+	    	.expect('header','content-type', 'application/json;charset=UTF-8')
+	    	.expect('json', 'EntityDirectory', {
+           	 	numEntries: 50
+         	})
+         	.expect('json', 'EntityDirectory.heading', {
+           	 	resourceURI: 'entities'
+         	})
+	    	.done(done);
+		});
 
 //*********************************************************************
 // entities search for automobile
 //*********************************************************************
-frisby.create('CTS2 REST call: entities search for automobile')
-  .get(baseURL + 'entities?matchvalue=automobile&filtercomponent=resourceSynopsis&matchalgorithm=luceneQuery&maxtoreturn=50&format=json')
-  .expectStatus(200)
-  .expectHeaderContains('content-type', 'charset=utf-8')
-  .expectBodyContains('Automobiles-1.0')
-  .expectJSONLength('EntityDirectory.entry',1)
-  .expectBodyContains('Automobiles')
-  .expectBodyContains('A0001')
-  .toss();
-
-//*********************************************************************
-// entities read by URI  // not working with the redirect
-//*********************************************************************
-//frisby.create('CTS2 REST call: read entity by URI')
-//  .get(baseURL + 'entitybyuri?uri=Automobiles:VD005&format=json')
-//  .expectStatus(301)
-//  .expectHeaderContains('content-type', 'charset=utf-8')
-//  .expectBodyContains('Automobiles-1.0')
-//  .expectJSONLength('entityDescription',1)
-//  .expectBodyContains('Automobiles')
-//  .expectBodyContains('VD005')
-//  .toss();
-
+	it('CTS2 REST call: entities - entities search for automobile', function (done) {
+	  	frisby.get(baseURL + 'entities?matchvalue=automobile&filtercomponent=resourceSynopsis&matchalgorithm=luceneQuery&maxtoreturn=50&format=json')
+	    	.expect('status', 200)
+			.expect('header','content-type', 'application/json;charset=UTF-8')
+			.expect('json', 'EntityDirectory', {
+           	 	numEntries: 1
+         	})
+			.expect('json', 'EntityDirectory.heading', {
+           	 	resourceURI: 'entities'
+         	})
+         	.expect('json', 'EntityDirectory.entry.*', {
+           	 	about: 'urn:oid:11.11.0.1:A0001',
+         	})
+         	.expect('json', 'EntityDirectory.entry.*.name', {
+           	 	name: 'A0001'
+         	})
+	    	.done(done);
+		});
+	    	
 //*********************************************************************
 // entities read 
 //*********************************************************************
-frisby.create('CTS2 REST call: read entity')
-  .get(baseURL + 'codesystem/Automobiles/version/1.0/entity/VD005?format=json')
-  .expectStatus(200)
-  .expectHeaderContains('content-type', 'charset=utf-8')
-  .expectBodyContains('Automobiles-1.0')
-  .expectJSONLength('EntityDescriptionMsg.entityDescription',1)
-  .expectBodyContains('Automobiles')
-  .expectBodyContains('VD005')
-  .toss();
 
-
-//*********************************************************************
-// entities read by ID  // not working with the redirect
-//*********************************************************************
-//frisby.create('CTS2 REST call: read entity by ID')
-//  .get(baseURL + 'entity/Automobiles:VD005?format=json')
-//  .expectStatus(200)
-//  .expectHeaderContains('content-type', 'charset=utf-8')
-//  .expectBodyContains('Automobiles-1.0')
-//  .expectJSONLength('EntityDescriptionMsg.entityDescription',1)
-//  .expectBodyContains('Automobiles')
-//  .expectBodyContains('VD005')
-//  .toss();
-
+	it('CTS2 REST call: entities - read entity', function (done) {
+	  	frisby.get(baseURL + 'codesystem/Automobiles/version/1.0/entity/VD005?format=json')
+	    	.expect('status', 200)
+			.expect('header','content-type', 'application/json;charset=UTF-8')
+			.expect('json', 'EntityDescriptionMsg.entityDescription.namedEntity.describingCodeSystemVersion.version', {
+           	 	content: 'Automobiles-1.0'
+         	})
+         	.expect('json', 'EntityDescriptionMsg.entityDescription.namedEntity.entityID', {
+           	 	namespace: 'Automobiles',
+           	 	name: 'VD005'
+         	})
+         	.expect('json', 'EntityDescriptionMsg.entityDescription.namedEntity.describingCodeSystemVersion.codeSystem', {
+           	 	content: 'Automobiles',
+           	 	uri: 'urn:oid:11.11.0.1'
+         	})
+         	.expect('jsonTypes', 'EntityDescriptionMsg.entityDescription.namedEntity', {
+            	entryState: Joi.string(),
+            	about: Joi.string()
+          	})
+	    	.done(done);
+		});
 
 //*********************************************************************
 // codesystemversions - search all
 //*********************************************************************
-frisby.create('CTS2 REST call: codesystemversions - search all')
-  .get(baseURL + 'codesystemversions?format=json')
-  .expectStatus(200)
-  .expectHeaderContains('content-type', 'charset=utf-8')
-  .expectBodyContains('Automobiles-1.0')
-  .expectJSONLength('CodeSystemVersionCatalogEntryDirectory.entry',8)
-  .expectJSON('CodeSystemVersionCatalogEntryDirectory.entry.?', {
-     codeSystemVersionName:"Automobiles-1.0",
-     documentURI:"urn:oid:11.11.0.1:1.0"
-   })
- .toss();
+	it('CTS2 REST call: entities - codesystemversions - search all', function (done) {
+	  	frisby.get(baseURL + 'codesystemversions?format=json')
+	    	.expect('status', 200)
+			.expect('header','content-type', 'application/json;charset=UTF-8')
+			.expect('json', 'CodeSystemVersionCatalogEntryDirectory.entry.?', {
+           	 	codeSystemVersionName: 'Automobiles-1.0'
+         	})
+         	.expect('json', 'CodeSystemVersionCatalogEntryDirectory.entry.?', {
+           	 	codeSystemVersionName: 'Automobiles-1.0',
+           	 	documentURI: 'urn:oid:11.11.0.1:1.0',
+				officialResourceVersionId: '1.0',
+				about: 'urn:oid:11.11.0.1:1.0',
+				formalName: 'autos',
+				
+				codeSystemVersionName: 'GermanMadeParts-2.0',
+           	 	documentURI: 'urn:oid:11.11.0.2:2.0',
+				officialResourceVersionId: '2.0',
+				about: 'urn:oid:11.11.0.2:2.0',
+				formalName: 'GMP'
+         	})
+        	.expect('json', 'CodeSystemVersionCatalogEntryDirectory', {
+           	 	complete: 'COMPLETE',
+           	 	numEntries: 8
+         	})
+	    	.done(done);
+		});
 
 //*********************************************************************
 // codesystemversions - search automobile
 //*********************************************************************
-frisby.create('CTS2 REST call: codesystemversions - search automobile')
-  .get(baseURL + 'codesystemversions?matchvalue=automobile&filtercomponent=resourceSynopsis&format=json')
-  .expectStatus(200)
-  .expectHeaderContains('content-type', 'charset=utf-8')
-  .expectJSONLength('CodeSystemVersionCatalogEntryDirectory.entry',2)
-  .expectJSON('CodeSystemVersionCatalogEntryDirectory.entry.?', {
-     codeSystemVersionName:"Automobiles-1.0",
-     documentURI:"urn:oid:11.11.0.1:1.0"
-   })
-  .expectJSON('CodeSystemVersionCatalogEntryDirectory.entry.?', {
-     codeSystemVersionName:"Automobiles_extension-1.0[:]extension",
-     documentURI:"urn:oid:11.11.0.1.1-extension:1.0-extension"
-   })
- .toss();
+	it('CTS2 REST call: entities - codesystemversions - search automobile', function (done) {
+	  	frisby.get(baseURL + 'codesystemversions?matchvalue=automobile&filtercomponent=resourceSynopsis&format=json')
+	    	.expect('status', 200)
+			.expect('header','content-type', 'application/json;charset=UTF-8')
+			.expect('json', 'CodeSystemVersionCatalogEntryDirectory.entry.?', {
+           	 	codeSystemVersionName: 'Automobiles-1.0',
+           	 	officialResourceVersionId: '1.0',
+				about: 'urn:oid:11.11.0.1:1.0',
+				formalName: 'autos',
+				
+				codeSystemVersionName: 'Automobiles_extension-1.0[:]extension',
+           	 	officialResourceVersionId: '1.0-extension',
+				about: 'urn:oid:11.11.0.1.1-extension:1.0-extension',
+				formalName: 'Automobiles Extension'
+         	})
+         	.expect('json', 'CodeSystemVersionCatalogEntryDirectory', {
+           	 	complete: 'COMPLETE',
+           	 	numEntries: 2
+         	})
+        
+	    	.done(done);
+		});
 
 //*********************************************************************
 // codesystemversions - exact search Automobiles-1.0
 //*********************************************************************
-frisby.create('CTS2 REST call: codesystemversions - exact search Automobiles-1.0')
-  .get(baseURL + 'codesystemversions?matchvalue=Automobiles-1.0&filtercomponent=resourceName&matchalgorithm=exactMatch&format=json')
-  .expectStatus(200)
-  .expectHeaderContains('content-type', 'charset=utf-8')
-  .expectJSONLength('CodeSystemVersionCatalogEntryDirectory.entry',1)
-  .expectJSON('CodeSystemVersionCatalogEntryDirectory.entry.?', {
-     codeSystemVersionName:"Automobiles-1.0",
-     documentURI:"urn:oid:11.11.0.1:1.0"
-   })
- .toss();
-
+ 	it('CTS2 REST call: entities - codesystemversions - exact search Automobiles-1.0', function (done) {
+	  	frisby.get(baseURL + 'codesystemversions?matchvalue=Automobiles-1.0&filtercomponent=resourceName&matchalgorithm=exactMatch&format=json')
+	    	.expect('status', 200)
+			.expect('header','content-type', 'application/json;charset=UTF-8')
+			.expect('json', 'CodeSystemVersionCatalogEntryDirectory.entry.?', {
+           	 	codeSystemVersionName: 'Automobiles-1.0',
+           	 	officialResourceVersionId: '1.0',
+				about: 'urn:oid:11.11.0.1:1.0',
+				formalName: 'autos'
+         	})
+         	.expect('json', 'CodeSystemVersionCatalogEntryDirectory', {
+           	 	complete: 'COMPLETE',
+           	 	numEntries: 1
+         	})
+        
+	    	.done(done);
+		});
+	
 //*********************************************************************
 // codesystemversion - read by version ID
 //*********************************************************************
-frisby.create('CTS2 REST call: codesystem - read by version ID')
-  .get(baseURL + 'codesystem/Automobiles/version/1.0?format=json')
-  .expectStatus(200)
-  .expectHeaderContains('content-type', 'charset=utf-8')
-  .expectBodyContains('Automobiles-1.0')
-  .expectJSON('CodeSystemVersionCatalogEntryMsg.codeSystemVersionCatalogEntry', {
-     formalName:"autos",
-     officialResourceVersionId:"1.0"
-   })
-  .toss();
+	it('CTS2 REST call: entities - read by version ID', function (done) {
+	  	frisby.get(baseURL + 'codesystem/Automobiles/version/1.0?format=json')
+	    	.expect('status', 200)
+			.expect('header','content-type', 'application/json;charset=UTF-8')
+			.expect('json', 'CodeSystemVersionCatalogEntryMsg.codeSystemVersionCatalogEntry', {
+           	 	codeSystemVersionName: 'Automobiles-1.0',
+           	 	documentURI: 'urn:oid:11.11.0.1:1.0',
+           	 	officialResourceVersionId: '1.0',
+				about: 'urn:oid:11.11.0.1:1.0',
+				formalName: 'autos',
+				state: 'FINAL',
+				entryState: 'ACTIVE'
+         	})
+         	.expect('json', 'CodeSystemVersionCatalogEntryMsg.codeSystemVersionCatalogEntry.sourceAndNotation', {
+           	 	sourceAndNotationDescription: 'LexEVS'
+         	})
+         	.expect('json', 'CodeSystemVersionCatalogEntryMsg.codeSystemVersionCatalogEntry.resourceSynopsis', {
+           	 	value: 'Automobiles'
+         	})
+        
+	    	.done(done);
+		});
 
 //*********************************************************************
 // codesystemversion - search entities
 //*********************************************************************
-frisby.create('CTS2 REST call: codesystem - search entities')
-  .get(baseURL + 'codesystem/Automobiles/version/1.0/entities?format=json')
-  .expectStatus(200)
-  .expectHeaderContains('content-type', 'charset=utf-8')
-  //.expectJSONLength('EntityDirectory.entry',22)
-  .expectBodyContains('Automobiles-1.0')
-  .expectBodyContains('Automobile')
-  .expectBodyContains('A0001')
-  .expectJSON('EntityDirectory.entry.?', {
-     about:"urn:oid:11.11.0.1:A0001",
-   })
-  .expectJSON('EntityDirectory.entry.?', {
-     about:"urn:oid:11.11.0.1:Chevy",
-   })
-  .toss();
+	it('CTS2 REST call: codesystem - search entities', function (done) {
+	  	frisby.get(baseURL + 'codesystem/Automobiles/version/1.0/entities?format=json')
+	    	.expect('status', 200)
+			.expect('header','content-type', 'application/json;charset=UTF-8')
+			.expect('json', 'EntityDirectory.entry.?', {
+           	 	about: 'urn:oid:11.11.0.1:C0011(5564)',
+           	 	about: 'urn:oid:11.11.0.1:Ford',
+           	 	about: 'urn:oid:11.11.0.1:A0001'
+         	})
+         	.expect('json', 'EntityDirectory.entry.*.name', {
+           	 	namespace: 'Automobiles',
+           	 	name: 'C0011(5564)',
+           	 	
+           	 	namespace: 'Automobiles',
+           	 	name: 'Ford',
+           	 	
+           	 	namespace: 'Automobiles',
+           	 	name: 'A0001'
+         	})
+         	.expect('json', 'EntityDirectory.entry.*.knownEntityDescription', {
+//            	 	href: baseURL + 'codesystem/Automobiles/version/1.0/entity/C0011(5564)',
+           	 	designation: 'Car With Trailer',
+           	 	
+//            	 	href: baseURL + 'codesystem/Automobiles/version/1.0/entity/Ford',
+           	 	designation: 'Ford Motor Company',
+           	 	
+//            	 	href: baseURL + 'codesystem/Automobiles/version/1.0/entity/A0001',
+           	 	designation: 'Automobile',
+           	 	
+//            	 	href: baseURL + 'codesystem/Automobiles/version/1.0/entity/Chevy',
+           	 	designation: 'Chevrolet',           	 	
+         	})
+         	.expect('json', 'EntityDirectory', {
+           	 	complete: 'COMPLETE',
+           	 	numEntries: 22
+         	})
+        
+	    	.done(done);
+		});
 
 //*********************************************************************
 // codesystemversion - read an entity by id
 //*********************************************************************
-frisby.create('CTS2 REST call: codesystem - read an entity by id')
-  .get(baseURL + 'codesystem/Automobiles/version/1.0/entity/A0001?format=json')
-  .expectStatus(200)
-  .expectHeaderContains('content-type','charset=utf-8')
-  .expectJSON('EntityDescriptionMsg.entityDescription.namedEntity', {
-      entryState:'ACTIVE',
-      about:'urn:oid:11.11.0.1:A0001'
-   })
-  .expectJSON('EntityDescriptionMsg.entityDescription.namedEntity.designation.?', {
-      designationRole:'PREFERRED',
-      value:'Automobile'
-   })
-  .toss();
+	it('CTS2 REST call: codesystem - read an entity by id', function (done) {
+	  	frisby.get(baseURL + 'codesystem/Automobiles/version/1.0/entity/A0001?format=json')
+	    	.expect('status', 200)
+			.expect('header','content-type', 'application/json;charset=UTF-8')
+			
+			.expect('json', 'EntityDescriptionMsg.entityDescription.namedEntity', {
+           	 	entryState: 'ACTIVE',
+           	 	about: 'urn:oid:11.11.0.1:A0001'
+         	})
+         	.expect('json', 'EntityDescriptionMsg.entityDescription.namedEntity.describingCodeSystemVersion.version', {
+           	 	content: 'Automobiles-1.0',
+//            	 	href: baseURL + 'codesystem/Automobiles/version/1.0'
+         	})
+         	.expect('json', 'EntityDescriptionMsg.entityDescription.namedEntity.entityID', {
+           	 	namespace: 'Automobiles',
+           	 	name: 'A0001'
+         	})
+         	.expect('json', 'EntityDescriptionMsg.entityDescription.namedEntity.designation.?', {
+           	 	designationRole: 'PREFERRED',
+           	 	value: 'Automobile'
+         	})
+         	.expect('json', 'EntityDescriptionMsg.entityDescription.namedEntity.entityType.?', {
+           	 	uri: 'http://www.w3.org/2002/07/owl#Class',
+           	 	namespace: 'owl',
+           	 	name: 'Class'
+         	})
+	    	.done(done);
+		});
 
 //*********************************************************************
 // associations - get children
 //*********************************************************************
-frisby.create('CTS2 REST call: associations - get children')
-  .get(baseURL + 'codesystem/Automobiles/version/1.0/entity/C0001/children?format=json')
-  .expectStatus(200)
-  .expectHeaderContains('content-type', 'charset=utf-8')
-  .expectJSON('EntityDirectory', {
-      complete:'COMPLETE',
-      numEntries:1
-   })
-  .expectBodyContains('C0011(5564)')
-  .expectBodyContains('Car With Trailer')
-  .toss();
-
+	it('CTS2 REST call: codesystem - associations - get children', function (done) {
+	  	frisby.get(baseURL + 'codesystem/Automobiles/version/1.0/entity/C0001/children?format=json')
+	    	.expect('status', 200)
+			.expect('header','content-type', 'application/json;charset=UTF-8')
+				
+			.expect('json', 'EntityDirectory', {
+           	 	complete: "COMPLETE",
+           	 	numEntries: 1
+         	})
+         	.expect('json', 'EntityDirectory.entry.?', {
+           	 	about: 'urn:oid:11.11.0.1:C0011(5564)'
+         	})
+         	.expect('json', 'EntityDirectory.entry.*.name', {
+           	 	namespace: 'Automobiles',
+           	 	name: 'C0011(5564)'
+         	})
+	    	.done(done);
+		});
 
 //*********************************************************************
 // associations - subjectof
 //*********************************************************************
-frisby.create('CTS2 REST call:  associations - subjectof')
-  .get(baseURL + 'codesystem/Automobiles/version/1.0/entity/C0001/subjectof?format=json')
-  .expectStatus(200)
-  .expectHeaderContains('content-type', 'charset=utf-8')
-  .expectJSON('AssociationDirectory', {
-      complete:'COMPLETE',
-      numEntries:1
-   })
-  .expectBodyContains('C0011(5564)')
-  .toss();
+	it('CTS2 REST call: codesystem - associations - subjectof', function (done) {
+	  	frisby.get(baseURL + 'codesystem/Automobiles/version/1.0/entity/C0001/subjectof?format=json')
+	    	.expect('status', 200)
+			.expect('header','content-type', 'application/json;charset=UTF-8')
+				
+			.expect('json', 'AssociationDirectory', {
+           	 	complete: "COMPLETE",
+           	 	numEntries: 1
+         	})
+         	.expect('json', 'AssociationDirectory.entry.*.subject', {
+           	 	uri: 'urn:oid:11.11.0.1:C0001',
+           	 	namespace: 'Automobiles',
+           	 	name: 'C0011'
+         	})
+         	.expect('json', 'AssociationDirectory.entry.*.predicate', {
+           	 	uri: 'urn:oid:1.3.6.1.4.1.2114.108.1.8.1',
+           	 	name: 'hasSubtype'
+         	})   	
+	    	.done(done);
+		});
 
 //*********************************************************************
 // associations - targetof
 //*********************************************************************
-frisby.create('CTS2 REST call: associations - targetof')
-  .get(baseURL + 'codesystem/Automobiles/version/1.0/entity/C0001/targetof?format=json')
-  .expectStatus(200)
-  .expectHeaderContains('content-type', 'charset=utf-8')
-  .expectJSON('AssociationDirectory', {
-      complete:'COMPLETE',
-      numEntries:1
-   })
-  .expectBodyContains('A0001')
-  .toss();
+	it('CTS2 REST call: codesystem - associations - targetof', function (done) {
+	  	frisby.get(baseURL + 'codesystem/Automobiles/version/1.0/entity/C0001/targetof?format=json')
+	    	.expect('status', 200)
+			.expect('header','content-type', 'application/json;charset=UTF-8')
+				
+			.expect('json', 'AssociationDirectory', {
+           	 	complete: "COMPLETE",
+           	 	numEntries: 1
+         	})
+         	.expect('json', 'AssociationDirectory.entry.*.subject', {
+           	 	uri: 'urn:oid:11.11.0.1:C0001',
+           	 	namespace: 'Automobiles',
+           	 	name: 'C0011'
+         	})
+         	.expect('json', 'AssociationDirectory.entry.*.predicate', {
+           	 	uri: 'urn:oid:1.3.6.1.4.1.2114.108.1.8.1',
+           	 	name: 'hasSubtype'
+         	})   	
+	    	.done(done);
+		});
 
 //*********************************************************************
 // valuesets - search (all)
 //*********************************************************************
-frisby.create('CTS2 REST call: valuesets - search (all)')
-  .get(baseURL + 'valuesets?format=json')
-  .expectStatus(200)
-  .expectHeaderContains('content-type', 'charset=utf-8')
-  .toss();
-
+	it('CTS2 REST call: valuesets - search (all)', function (done) {
+	  	frisby.get(baseURL + 'valuesets?format=json')
+	    	.expect('status', 200)
+			.expect('header','content-type', 'application/json;charset=UTF-8')
+				
+			.expect('json', 'ValueSetCatalogEntryDirectory', {
+           	 	complete: "COMPLETE",
+           	 	numEntries: 23
+         	})
+         	.expect('json', 'ValueSetCatalogEntryDirectory.entry.?', {
+           	 	valueSetName: "Very Sick Cancer Patient",
+           	 	about: 'OWL2LEXEVS:VerySickCancerPatient',
+           	 	formalName: 'Very Sick Cancer Patient',
+// 				href:  baseURL + 'valueset/Very Sick Cancer Patient',
+				resourceName: 'Very Sick Cancer Patient',
+				
+				valueSetName: "All Domestic Autos But GM",
+           	 	about: 'SRITEST:AUTO:AllDomesticButGM',
+           	 	formalName: 'All Domestic Autos But GM',
+// 				href:  baseURL + 'valueset/All Domestic Autos But GM',
+				resourceName: 'All Domestic Autos But GM'
+         	})
+	    	.done(done);
+		});
+	
 //*********************************************************************
 // valuesets - search (Auto)
 //*********************************************************************
-frisby.create('CTS2 REST call: valuesets - search (Auto)')
-  .get(baseURL + 'valuesets?matchvalue=Autos&filtercomponent=resourceName&maxtoreturn=50&matchalgorithm=contains&format=json')
-  .expectStatus(200)
-  .expectHeaderContains('content-type', 'charset=utf-8')
-  .expectJSON('ValueSetCatalogEntryDirectory.entry.?', {
-      valueSetName:'All Domestic Autos AND GM'
-   })
-  .expectJSON('ValueSetCatalogEntryDirectory.entry.?', {
-      valueSetName:'All Domestic Autos AND GM1'
-   })
-  .toss();
+	it('CTS2 REST call: valuesets - search (Auto)', function (done) {
+	  	frisby.get(baseURL + 'valuesets?matchvalue=Autos&filtercomponent=resourceName&maxtoreturn=50&matchalgorithm=contains&format=json')
+	    	.expect('status', 200)
+			.expect('header','content-type', 'application/json;charset=UTF-8')
+				
+			.expect('json', 'ValueSetCatalogEntryDirectory', {
+           	 	complete: "COMPLETE",
+           	 	numEntries: 4
+         	})
+         	.expect('json', 'ValueSetCatalogEntryDirectory.entry.?', {
+           	 	valueSetName: "All Domestic Autos AND GM",
+           	 	about: 'SRITEST:AUTO:AllDomesticANDGM',
+           	 	formalName: 'All Domestic Autos AND GM',
+// 				href:  baseURL + 'valueset/All Domestic Autos AND GM',
+				resourceName: 'All Domestic Autos AND GM',
 
+				valueSetName: "All Domestic Autos But GM",
+           	 	about: 'SRITEST:AUTO:AllDomesticButGM',
+           	 	formalName: 'All Domestic Autos But GM',
+// 				href:  baseURL + 'valueset/All Domestic Autos But GM',
+				resourceName: 'All Domestic Autos But GM'
+         	})
+	    	.done(done);
+		});
 
 //*********************************************************************
 // valuesets - read a valueset
 //*********************************************************************
-frisby.create('CTS2 REST call: valuesets - read a valueset')
-  .get(baseURL + 'valueset/All Domestic Autos AND GM?format=json')
-  .expectStatus(200)
-  .expectHeaderContains('content-type', 'charset=utf-8')
-  .expectJSON('ValueSetCatalogEntryMsg.valueSetCatalogEntry', {
-      valueSetName:'All Domestic Autos AND GM',
-      entryState:'ACTIVE'
-   })
-  .toss();
+	it('CTS2 REST call: valuesets - read a valueset', function (done) {
+	  	frisby.get(baseURL + 'valueset/All Domestic Autos AND GM?format=json')
+	    	.expect('status', 200)
+			.expect('header','content-type', 'application/json;charset=UTF-8')
+				
+			.expect('json', 'ValueSetCatalogEntryMsg.valueSetCatalogEntry', {
+           	 	valueSetName: "All Domestic Autos AND GM",
+           	 	about: 'SRITEST:AUTO:AllDomesticANDGM',
+           	 	formalName: 'All Domestic Autos AND GM',
+				entryState: 'ACTIVE',
+         	})
+         	.expect('json', 'ValueSetCatalogEntryMsg.valueSetCatalogEntry.currentDefinition.valueSetDefinition', {
+           	 	uri: 'SRITEST:AUTO:AllDomesticANDGM'
+         	})
+         	.expect('json', 'ValueSetCatalogEntryMsg.valueSetCatalogEntry.currentDefinition.valueSet', {
+           	 	content: 'All Domestic Autos AND GM'
+         	})
+	    	.done(done);
+		});
 
 //*********************************************************************
 // valuesets - resolve a valueset definition by id
 //*********************************************************************
-frisby.create('CTS2 REST call: valuesets - resolve a valueset definition by id')
-  .get(baseURL + 'valueset/All Domestic Autos But GM/definition/13ff5406?format=json')
-  .expectStatus(200)
-  .expectHeaderContains('content-type', 'charset=utf-8')
-  .expectJSON('ValueSetDefinitionMsg.valueSetDefinition', {
-      about:'SRITEST:AUTO:AllDomesticButGM',
-      formalName: 'SRITEST:AUTO:AllDomesticButGM',
-      entryState:'ACTIVE'
-   })
-  .toss();
+	it('CTS2 REST call: valuesets - resolve a valueset definition by id', function (done) {
+	  	frisby.get(baseURL + 'valueset/All Domestic Autos But GM/definition/13ff5406?format=json')
+	    	.expect('status', 200)
+			.expect('header','content-type', 'application/json;charset=UTF-8')
+				
+			.expect('json', 'ValueSetDefinitionMsg.valueSetDefinition', {
+           	 	documentURI: 'SRITEST:AUTO:AllDomesticButGM',
+           	 	about: 'SRITEST:AUTO:AllDomesticButGM',
+           	 	state: 'FINAL',
+           	 	formalName: 'SRITEST:AUTO:AllDomesticButGM',
+				entryState: 'ACTIVE',
+         	})
+         	.expect('json', 'ValueSetDefinitionMsg.valueSetDefinition.definedValueSet', {
+           	 	content: 'All Domestic Autos But GM',
+         	})
+         	.expect('json', 'ValueSetDefinitionMsg.valueSetDefinition.entry.?', {
+           	 	operator: 'UNION',
+           	 	entryOrder: 1,
+           	 	
+           	 	operator: 'SUBTRACT',
+           	 	entryOrder: 2
+         	})
+         	.expect('json', 'ValueSetDefinitionMsg.valueSetDefinition.entry.*.associatedEntities', {
+           	 	direction: 'SOURCE_TO_TARGET',
+           	 	leafOnly: 'ALL_INTERMEDIATE_NODES',
+           	 	transitivity: 'TRANSITIVE_CLOSURE',
+         	})
+         	.expect('json', 'ValueSetDefinitionMsg.valueSetDefinition.sourceAndNotation', {
+           	 	sourceAndNotationDescription: 'LexEVS'
+         	})
+	    	.done(done);
+		});
 
 //*********************************************************************
 // valuesets - search all pre-resolved value set definitions
 //*********************************************************************
-frisby.create('CTS2 REST call: valuesets - search all pre-resolved value set definitions')
-  .get(baseURL + 'resolvedvaluesets?format=json')
-  .expectStatus(200)
-  .expectHeaderContains('content-type', 'charset=utf-8')
-  .expectBodyContains('SRITEST:AUTO:AllDomesticButGM')
-  .toss();
+	it('CTS2 REST call: valuesets - search all pre-resolved value set definitions', function (done) {
+	  	frisby.get(baseURL + 'resolvedvaluesets?format=json')
+	    	.expect('status', 200)
+			.expect('header','content-type', 'application/json;charset=UTF-8')
+			.expect('json', 'ResolvedValueSetDirectory', {
+           	 	complete: "COMPLETE",
+           	 	numEntries: 2
+         	})
+         	.expect('json', 'ResolvedValueSetDirectory.entry.?', {
+           	 	resolvedValueSetURI: "SRITEST:AUTO:AllDomesticButGM",
+           	 	resolvedValueSetURI: "SRITEST:AUTO:AllDomesticButGMWithlt250charName"
+         	})         	
+	    	.done(done);
+		});
 
 //*********************************************************************
 // maps - search map version summaries (empty search)
 //*********************************************************************
-frisby.create('CTS2 REST call: maps - search map version summaries (empty search)')
-  .get(baseURL + 'mapversions?format=json')
-  .expectStatus(200)
-  .expectHeaderContains('content-type', 'charset=utf-8')
-  .expectJSON('MapVersionDirectory.entry.?', {
-      mapVersionName:'Mapping Sample-1.0'
-   })
-  .toss();
+	it('CTS2 REST call: maps - search map version summaries (empty search)', function (done) {
+	  	frisby.get(baseURL + 'mapversions?format=json')
+	    	.expect('status', 200)
+			.expect('header','content-type', 'application/json;charset=UTF-8')
+			.expect('json', 'MapVersionDirectory', {
+           	 	complete: "COMPLETE",
+           	 	numEntries: 1
+         	})
+         	.expect('json', 'MapVersionDirectory.entry.?', {
+           	 	mapVersionName: "Mapping Sample-1.0",
+           	 	documentURI: "urn:oid:mapping:sample",
+           	 	about: 'urn:oid:mapping:sample',
+           	 	formalName: 'MappingSample',
+//            	 	href: baseURL + 'map/Mapping Sample/version/Mapping Sample-1.0'
+         	})         	
+	    	.done(done);
+		});
 
 //*********************************************************************
 // maps - search map version summaries (with search criteria)
 //*********************************************************************
-frisby.create('CTS2 REST call: maps - search map version summaries (with search criteria)')
-  .get(baseURL + 'mapversions?matchvalue=sample&filtercomponent=resourceName&maxtoreturn=50&format=json')
-  .expectStatus(200)
-  .expectHeaderContains('content-type', 'charset=utf-8')
-  .expectJSON('MapVersionDirectory.entry.?', {
-      mapVersionName:'Mapping Sample-1.0'
-   })
-  .expectJSON('MapVersionDirectory', {
-      numEntries:1
-   })
-  .toss();
+	it('CTS2 REST call: maps - search map version summaries (with search criteria)', function (done) {
+	  	frisby.get(baseURL + 'mapversions?matchvalue=sample&filtercomponent=resourceName&maxtoreturn=50&format=json')
+	    	.expect('status', 200)
+			.expect('header','content-type', 'application/json;charset=UTF-8')
+			
+			.expect('json', 'MapVersionDirectory', {
+           	 	complete: "COMPLETE",
+           	 	numEntries: 1
+         	})
+         	.expect('json', 'MapVersionDirectory.entry.?', {
+           	 	mapVersionName: "Mapping Sample-1.0",
+           	 	documentURI: "urn:oid:mapping:sample",
+           	 	about: 'urn:oid:mapping:sample',
+           	 	formalName: 'MappingSample',
+//            	 	href: baseURL + 'map/Mapping Sample/version/Mapping Sample-1.0'
+         	})         	
+	    	.done(done);
+		});
 
 //*********************************************************************
 // maps - read map by map id
 //*********************************************************************
-frisby.create('CTS2 REST call: maps - read map by map id')
-  .get(baseURL + 'map/Mapping Sample?format=json')
-  .expectStatus(200)
-  .expectHeaderContains('content-type', 'charset=utf-8')
-  .expectJSON('MapCatalogEntryMsg.map', {
-      mapName:'Mapping Sample',
-      about: 'urn:oid:mapping:sample',
-      formalName: 'MappingSample',
-      entryState: 'ACTIVE'
-   })
-  .toss();
+	it('CTS2 REST call: maps - read map by map id', function (done) {
+	  	frisby.get(baseURL + 'map/Mapping Sample?format=json')
+	    	.expect('status', 200)
+			.expect('header','content-type', 'application/json;charset=UTF-8')
+			
+			.expect('json', 'MapCatalogEntryMsg.map', {
+           	 	mapName: "Mapping Sample",
+//            	 	versions: baseURL + 'map/Mapping Sample/versions',
+           	 	about: 'urn:oid:mapping:sample',
+           	 	entryState: 'ACTIVE'
+         	})
+         	.expect('json', 'MapCatalogEntryMsg.map.fromCodeSystem', {
+           	 	content: 'Automobiles',
+         	})  
+         	.expect('json', 'MapCatalogEntryMsg.map.toCodeSystem', {
+           	 	content: 'GermanMadeParts',
+         	})  
+         	.expect('json', 'MapCatalogEntryMsg.map.resourceSynopsis', {
+           	 	value: 'Mapping Sample',
+         	})           	
+	    	.done(done);
+		});
 
 //*********************************************************************
 // maps - read map versions of map by map id
 //*********************************************************************
-frisby.create('CTS2 REST call: maps - read map versions of map by map id')
-  .get(baseURL + 'map/Mapping Sample/versions?format=json')
-  .expectStatus(200)
-  .expectHeaderContains('content-type', 'charset=utf-8')
-  .expectJSON('MapVersionDirectory.entry.?', {
-      mapVersionName: 'Mapping Sample-1.0',
-      about: 'urn:oid:mapping:sample',
-      formalName: 'MappingSample',
-      documentURI: 'urn:oid:mapping:sample'
-   })
-  .toss();
-
+	it('CTS2 REST call: maps - read map versions of map by map id', function (done) {
+	  	frisby.get(baseURL + 'map/Mapping Sample/versions?format=json')
+	    	.expect('status', 200)
+			.expect('header','content-type', 'application/json;charset=UTF-8')
+			.expect('json', 'MapVersionDirectory', {
+           	 	complete: "COMPLETE",
+           	 	numEntries: 1
+         	})
+			.expect('json', 'MapVersionDirectory.entry.?', {
+           	 	mapVersionName: "Mapping Sample-1.0",
+           	 	documentURI: 'urn:oid:mapping:sample',
+           	 	about: 'urn:oid:mapping:sample',
+           	 	formalName: 'MappingSample',
+//            	 	href: baseURL + 'map/Mapping Sample/version/Mapping Sample-1.0'
+         	})
+         	.expect('json', 'MapVersionDirectory.entry.*.versionOf', {
+           	 	content: "Mapping Sample",
+           	 	uri: 'urn:oid:mapping:sample',
+//            	 	href: baseURL + 'map/Mapping Sample/version/Mapping Sample'
+         	})
+         	.expect('json', 'MapVersionDirectory.entry.*.resourceSynopsis', {
+           	 	value: "Mapping Sample"
+         	})
+	    	.done(done);
+		});
+		
 //*********************************************************************
 // maps - read spoecific version of a map by map id
 //*********************************************************************
-frisby.create('CTS2 REST call: maps - read spoecific version of a map by map id')
-  .get(baseURL + 'map/Mapping Sample/version/Mapping Sample-1.0?format=json')
-  .expectStatus(200)
-  .expectHeaderContains('content-type', 'charset=utf-8')
-  .expectJSON('MapVersionMsg.mapVersion', {
-      mapVersionName: 'Mapping Sample-1.0'
-   })
-  .toss();
+	it('CTS2 REST call: maps - read spoecific version of a map by map id', function (done) {
+	  	frisby.get(baseURL + 'map/Mapping Sample/version/Mapping Sample-1.0?format=json')
+	    	.expect('status', 200)
+			.expect('header','content-type', 'application/json;charset=UTF-8')
+			.expect('json', 'MapVersionMsg.mapVersion', {
+           	 	mapVersionName: "Mapping Sample-1.0",
+				documentURI: 'urn:oid:mapping:sample',
+				state: "FINAL",
+				about: 'urn:oid:mapping:sample',
+           	 	formalName: 'MappingSample',
+           	 	entryState: "ACTIVE"
+         	})
+			.expect('json', 'MapVersionMsg.mapVersion.versionOf', {
+           	 	content: "Mapping Sample",
+           	 	uri: 'urn:oid:mapping:sample',
+//            	 	href: baseURL + 'map/Mapping Sample'
+         	})
+         	.expect('json', 'MapVersionMsg.mapVersion.fromCodeSystemVersion.codeSystem', {
+           	 	content: "Automobiles"
+         	})
+         	.expect('json', 'MapVersionMsg.mapVersion.toCodeSystemVersion.codeSystem', {
+           	 	content: "GermanMadeParts"
+         	})
+         	.expect('json', 'MapVersionMsg.mapVersion.sourceAndNotation', {
+           	 	sourceAndNotationDescription: "LexEVS"
+         	})
+	    	.done(done);
+		});
 
 //*********************************************************************
 // maps - read entries of a specific version of a map by map id
 //*********************************************************************
-frisby.create('CTS2 REST call: maps - read entries of a specific version of a map by map id')
-  .get(baseURL + 'map/Mapping Sample/version/Mapping Sample-1.0/entries?format=json')
-  .expectStatus(200)
-  .expectHeaderContains('content-type', 'charset=utf-8')
-  .expectBodyContains('Jaguar')
-  .expectBodyContains('A0001')
-  .expectBodyContains('C0001')
-  .expectBodyContains('005')
-  .expectBodyContains('Ford')
-  .expectBodyContains('C0002')
-  .expectJSON('MapEntryDirectory', {
-      numEntries:6,
-      complete: 'COMPLETE'
-   })
-  .toss();
+	it('CTS2 REST call: maps - read entries of a specific version of a map by map id', function (done) {
+	  	frisby.get(baseURL + 'map/Mapping Sample/version/Mapping Sample-1.0/entries?format=json')
+	    	.expect('status', 200)
+			.expect('header','content-type', 'application/json;charset=UTF-8')
+			.expect('json', 'MapEntryDirectory', {
+           	 	complete: "COMPLETE",
+           	 	numEntries: 6
+         	})
+			.expect('json', 'MapEntryDirectory.entry.?', {
+           	 	resourceName: 'Automobiles:Jaguar',
+           	 	resourceName: 'Automobiles:A0001',
+           	 	resourceName: 'Automobiles:C0001',
+           	 	resourceName: 'Automobiles:005',
+           	 	resourceName: 'Automobiles:Ford',
+           	 	resourceName: 'Automobiles_Different_NS:C0002',
+         	})
+         	.expect('json', 'MapEntryDirectory.entry.*.map', {
+           	 	content: 'Mapping Sample',
+// 				href: baseURL + 'map/Mapping Sample'
+         	})
+         	.expect('json', 'MapEntryDirectory.entry.*.mapFrom', {
+           	 	uri: 'urn:oid:11.11.0.1:Jaguar',
+           	 	namespace: 'Automobiles',
+           	 	name: 'Jaguar',
+           	 	
+           	 	uri: 'urn:oid:11.11.0.1:A0001',
+           	 	namespace: 'Automobiles',
+           	 	name: 'A0001',
+         	})
+	    	.done(done);
+		});
 
 //*********************************************************************
 // maps - restrict entry of a specific version of a map by map id
 //*********************************************************************
-frisby.create('CTS2 REST call: maps - restrict entry of a specific version of a map by map id')
-  .get(baseURL + 'map/Mapping Sample/version/Mapping Sample-1.0/entry/Automobiles:Ford?format=json')
-  .expectStatus(200)
-  .expectHeaderContains('content-type', 'charset=utf-8')
-  .expectJSON('MapEntryMsg.entry.assertedBy.mapVersion', {
-      content: 'Mapping Sample-1.0'
-   })
-  .expectJSON('MapEntryMsg.entry.assertedBy.map', {
-      content: 'Mapping Sample'
-   })
-  .expectJSON('MapEntryMsg.entry.mapFrom', {
-     uri: 'urn:oid:11.11.0.1:Ford',
-     namespace: 'Automobiles',
-     name: 'Ford'
-   })
-  .toss();
+	it('CTS2 REST call: maps - restrict entry of a specific version of a map by map id', function (done) {
+	  	frisby.get(baseURL + 'map/Mapping Sample/version/Mapping Sample-1.0/entry/Automobiles:Ford?format=json')
+	    	.expect('status', 200)
+			.expect('header','content-type', 'application/json;charset=UTF-8')
+			.expect('json', 'MapEntryMsg.entry', {
+           	 	processingRule: "ALL_MATCHES",
+           	 	entryState: 'ACTIVE'
+         	})
+			.expect('json', 'MapEntryMsg.entry.assertedBy.mapVersion', {
+           	 	content: "Mapping Sample-1.0",
+//            	 	href: baseURL + 'codesystem/Mapping Sample/version/1.0'
+         	})
+         	.expect('json', 'MapEntryMsg.entry.assertedBy.map', {
+           	 	content: "Mapping Sample",
+//            	 	href: baseURL + 'map/Mapping Sample'
+         	})
+         	.expect('json', 'MapEntryMsg.entry.mapFrom', {
+           	 	uri: "urn:oid:11.11.0.1:Ford",
+           	 	namespace: 'Automobiles',
+           	 	name: 'Ford'
+         	})
+         	.expect('json', 'MapEntryMsg.entry.mapSet.?', {
+           	 	processingRule: 'ALL_MATCHES',
+           	 	entryOrder: 1           
+         	})
+	    	.done(done);
+		});
+		
+});
