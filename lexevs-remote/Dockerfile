@@ -1,23 +1,17 @@
-# Get the base image to Ubuntu
-FROM ncidockerhub.nci.nih.gov/lexevs/nci-tomcat:8.5.15-jre8
+# Get the base image from NCI. CentOS7 with Tomcat 8.5
+FROM ncidockerhub.nci.nih.gov/cbiit/centos7_tomcat85
 
-VOLUME /artifacts
 
-RUN apt-get update && apt-get clean
-
-RUN apt-get install -y openjdk-8-jre-headless openjdk-8-jdk
-
-ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/
 ENV PATH $JAVA_HOME/bin:$PATH
 
 ENV JAVA_TOOL_OPTIONS -Dfile.encoding=UTF8
 
-RUN apt-get install -y git
+ENV CATALINA_OPTS $CATALINA_OPTS -Dorg.LexGrid.LexBIG.caCore.Properties=/home/tomcata/lexevs.properties
 
-ADD lexevs.properties /
+ADD --chown=tomcata lexevs.properties /home/tomcata/
 
-ADD setenv.sh /usr/local/tomcat/bin/
+ADD --chown=tomcata setenv.sh /local/content/tomcat/container/bin/
+RUN chmod 755 /local/content/tomcat/container/bin/setenv.sh
 
-ADD run.sh /
-
-CMD sh /run.sh
+#VOLUME /artifacts
+ADD artifacts/lexevsapi65.war /local/content/tomcat/container/webapps/

@@ -1,5 +1,6 @@
 ROOT_DIR=$(pwd)
 
+
 # Get environment variables from the command line for git branches and git repositories.  
 # Default them if they are not set.
 #
@@ -65,11 +66,21 @@ fi
 
 rm -rf $ROOT_DIR/build
 
+# add artifacts to local directories so they have access to them
+rm -rf $ROOT_DIR/uriresolver/artifacts
+rm -rf $ROOT_DIR/lexevs-remote/artifacts
+rm -rf $ROOT_DIR/lexevs-cts2/artifacts
+
 mkdir $ROOT_DIR/build
 mkdir $ROOT_DIR/build/artifacts
 mkdir $ROOT_DIR/build/results
 mkdir $ROOT_DIR/build/lexevs
 mkdir $ROOT_DIR/build/lexevs-remote
+
+mkdir $ROOT_DIR/uriresolver/artifacts
+mkdir $ROOT_DIR/lexevs-remote/artifacts
+mkdir $ROOT_DIR/lexevs-cts2/artifacts
+
 
 MAVEN_CONTAINER=$(docker run -d -P --name maven -v ~/.m2:/root/.m2:rw -v ~/.ivy2:/root/.ivy2:rw ubuntu)
 
@@ -82,7 +93,7 @@ cd ..
 
 cd artifact-builder
 docker build -t artifact-builder .
-docker run --rm -v $ROOT_DIR/build/results:/results -e LEXEVS_BRANCH=$LEXEVS_BRANCH -e LEXEVS_REPO=$LEXEVS_REPO -e LEXEVS_REMOTE_BRANCH=$LEXEVS_REMOTE_BRANCH -e LEXEVS_REMOTE_REPO=$LEXEVS_REMOTE_REPO -e URI_RESOLVER_BRANCH=$URI_RESOLVER_BRANCH -e URI_RESOLVER_REPO=$URI_RESOLVER_REPO -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/lexevs-remote:/lexevs-remote -v $ROOT_DIR/build/artifacts:/artifacts --volumes-from maven --link mysql:mysql artifact-builder
+docker run --rm -v $ROOT_DIR/build/results:/results -e LEXEVS_BRANCH=$LEXEVS_BRANCH -e LEXEVS_REPO=$LEXEVS_REPO -e LEXEVS_REMOTE_BRANCH=$LEXEVS_REMOTE_BRANCH -e LEXEVS_REMOTE_REPO=$LEXEVS_REMOTE_REPO -e URI_RESOLVER_BRANCH=$URI_RESOLVER_BRANCH -e URI_RESOLVER_REPO=$URI_RESOLVER_REPO -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/lexevs-remote:/lexevs-remote -v $ROOT_DIR/lexevs-remote:/lexevs-remote-local -v $ROOT_DIR/uriresolver:/uriresolver-local -v $ROOT_DIR/build/artifacts:/artifacts --volumes-from maven --link mysql:mysql artifact-builder
 cd ..
 
 cd uriresolver
@@ -92,7 +103,7 @@ cd ..
 
 cd lexevs-cts2-builder
 docker build -t lexevs-cts2-builder .
-docker run --rm -v $ROOT_DIR/build/results:/results -e LEXEVS_SERVICE_BRANCH=$LEXEVS_SERVICE_BRANCH -e LEXEVS_SERVICE_REPO=$LEXEVS_SERVICE_REPO -v $ROOT_DIR/build/artifacts:/artifacts --volumes-from maven -e "uriResolutionServiceUrl=http://uriresolver:8080/uriresolver/" --link uriresolver:uriresolver lexevs-cts2-builder
+docker run --rm -e LEXEVS_SERVICE_BRANCH=$LEXEVS_SERVICE_BRANCH -e LEXEVS_SERVICE_REPO=$LEXEVS_SERVICE_REPO -v $ROOT_DIR/build/results:/results -v $ROOT_DIR/lexevs-cts2:/lexevs-cts2-local -v $ROOT_DIR/build/artifacts:/artifacts --volumes-from maven -e "uriResolutionServiceUrl=http://uriresolver:8080/uriresolver/" --link uriresolver:uriresolver lexevs-cts2-builder
 cd ..
 
 cd lexevs-testrunner
@@ -114,7 +125,7 @@ cd ..
 
 cd lexevs-cts2
 docker build -t lexevs-cts2 .
-LEXEVS_CTS2_CONTAINER=$(docker run -d --name lexevs-cts2 -p 8002:8080 -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/artifacts:/artifacts --link mysql:mysql --link uriresolver:uriresolver lexevs-cts2)
+LEXEVS_CTS2_CONTAINER=$(docker run -d --name lexevs-cts2 -p 8002:8080  -e USER_HOME=/home/tomcata  -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/artifacts:/artifacts --link mysql:mysql --link uriresolver:uriresolver lexevs-cts2)
 cd ..
 
 cd lexevs-cts2-testrunner
@@ -132,6 +143,9 @@ echo Logging out of NCI Nexus Docker hub
 echo 
 
 docker logout ncidockerhub.nci.nih.gov
+
+tail -f test.sh
+
 
 docker stop $LEXEVS_CTS2_CONTAINER
 docker stop $URIRESOLVER_CONTAINER
