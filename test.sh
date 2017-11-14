@@ -144,9 +144,6 @@ echo
 
 docker logout ncidockerhub.nci.nih.gov
 
-tail -f test.sh
-
-
 docker stop $LEXEVS_CTS2_CONTAINER
 docker stop $URIRESOLVER_CONTAINER
 docker stop $LEXEVS_REMOTE_CONTAINER
