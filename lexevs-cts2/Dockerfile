@@ -3,6 +3,8 @@ FROM ncidockerhub.nci.nih.gov/cbiit/centos7_tomcat85
 
 #VOLUME /artifacts
 
+USER root
+
 ADD --chown=tomcata setenv.sh /home/tomcata/
 ADD --chown=tomcata config/* /home/tomcata/.cts2/lexevscts2/config/
 
