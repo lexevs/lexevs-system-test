@@ -3,13 +3,15 @@ FROM ncidockerhub.nci.nih.gov/cbiit/centos7_tomcat85
 
 #VOLUME /artifacts
 
+#ADD --chown=tomcata setenv.sh /home/tomcata/
+#ADD --chown=tomcata config/* /home/tomcata/.cts2/lexevscts2/config/
+#RUN chmod -R 777 /home/tomcata/.cts2/
+#ADD --chown=tomcata artifacts/lexevscts2.war /local/content/tomcat/container/webapps
+#RUN chmod -R 777 /local/content/tomcat/container/webapps
+
 USER root
 
-ADD --chown=tomcata setenv.sh /home/tomcata/
-ADD --chown=tomcata config/* /home/tomcata/.cts2/lexevscts2/config/
+ADD setenv.sh /home/tomcata/
+ADD config/* /root/.cts2/lexevscts2/config/
 
-RUN chmod -R 777 /home/tomcata/.cts2/
-
-ADD --chown=tomcata artifacts/lexevscts2.war /local/content/tomcat/container/webapps
-
-RUN chmod -R 777 /local/content/tomcat/container/webapps
+ADD artifacts/lexevscts2.war /local/content/tomcat/container/webapps
