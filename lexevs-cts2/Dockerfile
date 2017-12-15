@@ -14,4 +14,4 @@ USER root
 ADD setenv.sh /home/tomcata/
 ADD config/* /root/.cts2/lexevscts2/config/
 
-ADD artifacts/lexevscts2.war /local/content/tomcat/container/webapps
+ADD /artifacts/lexevscts2.war /local/content/tomcat/container/webapps

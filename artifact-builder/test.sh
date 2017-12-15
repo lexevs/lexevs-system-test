@@ -27,8 +27,6 @@ git clone -b $LEXEVS_REMOTE_BRANCH $LEXEVS_REMOTE_REPO && \
     cp /lexevs/runtime-components/lexbig.jar system/lib/ && \
     cp /lexevs/test/lbTest.jar test/lib/ && \
     ant && \
-    # copy lexevs-remote artifact to local artifacts
-    cp output/lexevsapi65/package/webapp/*.tomcat.war /lexevs-remote-local/artifacts/lexevsapi65.war && \
     mv output/lexevsapi65/package/webapp/*.tomcat.war /artifacts/lexevsapi65.war && \
     cp -r ../* /lexevs-remote/
 
@@ -36,9 +34,7 @@ git clone -b $LEXEVS_REMOTE_BRANCH $LEXEVS_REMOTE_REPO && \
 cd $BUILDDIR
 git clone -b $URI_RESOLVER_BRANCH $URI_RESOLVER_REPO && \
     cd URI_Resolver && \
-    mvn clean install && \
-    # copy uriresolver artifact to local artifacts
-    cp target/*.war /uriresolver-local/artifacts/uriresolver.war && \    
+    mvn clean install && \   
     mv target/*.war /artifacts/uriresolver.war && \
     mkdir /results/uriresolver && \
     cp -R target/surefire-reports/* /results/uriresolver/
