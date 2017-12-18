@@ -1,10 +1,17 @@
-# Get the base image to Ubuntu
-FROM ncidockerhub.nci.nih.gov/lexevs/nci-tomcat:8.5.15-jre8
+# Get the base image from NCI. CentOS7 with Tomcat 8.5
+FROM ncidockerhub.nci.nih.gov/cbiit/centos7_tomcat85
 
-ADD setenv.sh /usr/local/tomcat/bin/
+#VOLUME /artifacts
 
+#ADD --chown=tomcata setenv.sh /home/tomcata/
+#ADD --chown=tomcata config/* /home/tomcata/.cts2/lexevscts2/config/
+#RUN chmod -R 777 /home/tomcata/.cts2/
+#ADD --chown=tomcata artifacts/lexevscts2.war /local/content/tomcat/container/webapps
+#RUN chmod -R 777 /local/content/tomcat/container/webapps
+
+USER root
+
+ADD setenv.sh /home/tomcata/
 ADD config/* /root/.cts2/lexevscts2/config/
 
-ADD run.sh /
-
-CMD sh /run.sh
+ADD /artifacts/lexevscts2.war /local/content/tomcat/container/webapps

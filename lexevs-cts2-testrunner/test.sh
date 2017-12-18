@@ -1,6 +1,6 @@
 #wait 50 seconds... time to let the lexevs-cts2 container to start up.
-echo Sleeping 50 seconds to let the lexevs-cts2 container to start up.
-sleep 50
+echo Sleeping 120 seconds to let the lexevs-cts2 container to start up.
+sleep 120
 
 jasmine-node --config baseURL http://lexevs-cts2:8080/lexevscts2/ cts2Calls_spec.js --junitreport
 

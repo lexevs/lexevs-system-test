@@ -1,5 +1,6 @@
 ROOT_DIR=$(pwd)
 
+
 # Get environment variables from the command line for git branches and git repositories.  
 # Default them if they are not set.
 #
@@ -92,7 +93,7 @@ cd ..
 
 cd lexevs-cts2-builder
 docker build -t lexevs-cts2-builder .
-docker run --rm -v $ROOT_DIR/build/results:/results -e LEXEVS_SERVICE_BRANCH=$LEXEVS_SERVICE_BRANCH -e LEXEVS_SERVICE_REPO=$LEXEVS_SERVICE_REPO -v $ROOT_DIR/build/artifacts:/artifacts --volumes-from maven -e "uriResolutionServiceUrl=http://uriresolver:8080/uriresolver/" --link uriresolver:uriresolver lexevs-cts2-builder
+docker run --rm -e LEXEVS_SERVICE_BRANCH=$LEXEVS_SERVICE_BRANCH -e LEXEVS_SERVICE_REPO=$LEXEVS_SERVICE_REPO -v $ROOT_DIR/build/results:/results -v $ROOT_DIR/build/artifacts:/artifacts --volumes-from maven -e "uriResolutionServiceUrl=http://uriresolver:8080/uriresolver/" --link uriresolver:uriresolver lexevs-cts2-builder
 cd ..
 
 cd lexevs-testrunner
@@ -114,7 +115,7 @@ cd ..
 
 cd lexevs-cts2
 docker build -t lexevs-cts2 .
-LEXEVS_CTS2_CONTAINER=$(docker run -d --name lexevs-cts2 -p 8002:8080 -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/artifacts:/artifacts --link mysql:mysql --link uriresolver:uriresolver lexevs-cts2)
+LEXEVS_CTS2_CONTAINER=$(docker run -d --name lexevs-cts2 -p 8002:8080  -e USER_HOME=/home/tomcata  -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/artifacts:/artifacts --link mysql:mysql --link uriresolver:uriresolver lexevs-cts2)
 cd ..
 
 cd lexevs-cts2-testrunner
@@ -126,6 +127,26 @@ cd lexevs-remote-testrunner
 docker build -t lexevs-remote-testrunner .
 docker run --rm -v $ROOT_DIR/build/lexevs-remote:/lexevs-remote -v $ROOT_DIR/build/results:/results --link lexevs-remote:lexevs-remote lexevs-remote-testrunner
 cd ..
+
+
+echo
+echo ************** LEXEVS_REMOTE_CONTAINER
+echo
+
+docker exec lexevs-remote cat /local/content/tomcat/container/logs/catalina.out
+
+echo
+echo ************** LEXEVS_CTS2_CONTAINER
+echo
+
+docker exec lexevs-cts2 cat /local/content/tomcat/container/logs/catalina.out
+
+echo
+echo ************** URIRESOLVER_CONTAINER
+echo
+
+docker exec uriresolver cat /local/content/tomcat/container/logs/catalina.out
+
 
 echo
 echo Logging out of NCI Nexus Docker hub
