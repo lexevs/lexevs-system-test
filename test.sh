@@ -236,14 +236,36 @@ echo
 
 docker logout ncidockerhub.nci.nih.gov
 
-docker stop $LEXEVS_CTS2_CONTAINER
-docker stop $URIRESOLVER_CONTAINER
-docker stop $LEXEVS_REMOTE_CONTAINER
+
+#Determine which containers to stop based on what was built
+
+if [[ "$TEST_OPTIONS" != *"-skipCts2"* ]];
+then
+	docker stop $LEXEVS_CTS2_CONTAINER
+	docker stop $URIRESOLVER_CONTAINER
+fi
+
+if [[ "$TEST_OPTIONS" != *"-skipRemote"* ]];
+then
+	docker stop $LEXEVS_REMOTE_CONTAINER
+fi
+
 docker stop $MAVEN_CONTAINER
 docker stop $MYSQL_CONTAINER
 
-docker rm $LEXEVS_CTS2_CONTAINER
-docker rm $URIRESOLVER_CONTAINER
-docker rm $LEXEVS_REMOTE_CONTAINER
+
+#Determine which containers to remove based on what was built
+
+if [[ "$TEST_OPTIONS" != *"-skipCts2"* ]];
+then
+	docker rm $LEXEVS_CTS2_CONTAINER
+	docker rm $URIRESOLVER_CONTAINER
+fi
+
+if [[ "$TEST_OPTIONS" != *"-skipRemote"* ]];
+then
+	docker rm $LEXEVS_REMOTE_CONTAINER
+fi
+
 docker rm $MAVEN_CONTAINER
 docker rm $MYSQL_CONTAINER
