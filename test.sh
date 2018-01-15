@@ -1,3 +1,5 @@
+#!/bin/bash
+
 ROOT_DIR=$(pwd)
 
 
@@ -110,7 +112,7 @@ cd ..
 #
 # Determine if uriresolver and lexevs-service should be built
 #
-if [[ $TEST_OPTIONS ==  *"-skipCts2"* ]]; 
+if [[ "$TEST_OPTIONS" ==  *"-skipCts2"* ]]; 
 then 
 	echo "** SKIP CTS2 TESTS.  URIRESOLVER will not be built **"; 
 	echo "** SKIP CTS2 TESTS.  LEXEVS-SERVICE will not be built **"; 

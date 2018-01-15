@@ -1,3 +1,5 @@
+#!/bin/bash
+
 BUILDDIR='/build'
 
 mkdir $BUILDDIR && cd $BUILDDIR
@@ -30,8 +32,8 @@ cp /mysql-connector-java-5.1.37.jar /lexevs/runtime/sqlDrivers
 
 #
 # If -skipRemote, then we don't need to build the lexevs-remote
-#
-if [[ $TEST_OPTIONS ==  *"-skipRemote"* ]]; 
+# 
+if [[ "$TEST_OPTIONS" == *"-skipRemote"* ]];
 then 
 	echo "** SKIP LEXEVS-REMOTE.  LEXEVS-REMOTE will not be built. "
 else
@@ -60,7 +62,6 @@ fi
 #
 # If -skipCts2, then we don't need to build the URI Resolver
 #
-
 if [[ "$TEST_OPTIONS" == *"-skipCts2"* ]]; 
 then 
 	echo "** SKIP CTS2 TESTS.  URI RESOLVER will not be built."
