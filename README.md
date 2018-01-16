@@ -28,9 +28,12 @@ The following is the specific order of the parameters that need to passed in:
 * ```URI_RESOLVER_REPO``` URI Resolver repository. Default: https://github.com/cts2/URI_Resolver.git
 * ```LEXEVS_SERVICE_BRANCH``` - LexEVS Service (CTS2) branch. Default: dev
 * ```LEXEVS_SERVICE_REPO``` - LexEVS Service (CTS2) repository. Default: https://github.com/cts2/lexevs-service.git
+* ```NCI_DOCKER_USER``` - NCI Nexus Docker hub ID
+* ```NCI_DOCKER_PW``` - NCI Nexus Docker hub PW
+* ```TEST_OPTIONS``` - Options to skip CTS2 tests and/or LexEVS Remote API tests.  This can be entered as -skipCts2 to skip CTS2 tests, -skipRemote to skip Remote API tests, or -skipCts2-skipRemote to skip bother
 
 Example call: Run the system tests, specifying the git branches and repositories:
 
 ```
-.\test.sh dev https://github.com/lexevs/lexevs.git dev https://github.com/lexevs/lexevs-remote.git tags/v1.0.0.FINAL https://github.com/cts2/URI_Resolver.git dev https://github.com/cts2/lexevs-service.git
+.\test.sh dev https://github.com/lexevs/lexevs.git dev https://github.com/lexevs/lexevs-remote.git tags/v1.0.0.FINAL https://github.com/cts2/URI_Resolver.git dev https://github.com/cts2/lexevs-service.git nci_docker_user nci_docker_pw -skipCts2-skipRemote
 ```
