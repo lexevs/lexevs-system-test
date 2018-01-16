@@ -1,3 +1,5 @@
+#!/bin/bash
+
 ROOT_DIR=$(pwd)
 
 
@@ -24,6 +26,13 @@ LEXEVS_SERVICE_REPO=${8:-https://github.com/cts2/lexevs-service.git}
 NCI_DOCKER_USER=${9}
 NCI_DOCKER_PW=${10}
 
+#
+# Option to skip CTS2 build and tests: -skipCts2
+# Option to skip lexevs-remote API build and tests: -skipRemote
+#
+TEST_OPTIONS=${11}
+
+
 echo
 echo LEXEVS_BRANCH : $LEXEVS_BRANCH
 echo LEXEVS_REPO   : $LEXEVS_REPO
@@ -39,6 +48,9 @@ echo LEXEVS_SERVICE_REPO   : $LEXEVS_SERVICE_REPO
 echo
 echo NCI_DOCKER_USER       : $NCI_DOCKER_USER
 echo
+echo TEST_OPTIONS          : $TEST_OPTIONS
+echo
+
 
 # Verify that the NCI Nexus user name is passed in.  Exit if it is not set.
 if [ -z "$NCI_DOCKER_USER" ]; 
@@ -83,18 +95,41 @@ cd ..
 
 cd artifact-builder
 docker build -t artifact-builder .
-docker run --rm -v $ROOT_DIR/build/results:/results -e LEXEVS_BRANCH=$LEXEVS_BRANCH -e LEXEVS_REPO=$LEXEVS_REPO -e LEXEVS_REMOTE_BRANCH=$LEXEVS_REMOTE_BRANCH -e LEXEVS_REMOTE_REPO=$LEXEVS_REMOTE_REPO -e URI_RESOLVER_BRANCH=$URI_RESOLVER_BRANCH -e URI_RESOLVER_REPO=$URI_RESOLVER_REPO -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/lexevs-remote:/lexevs-remote -v $ROOT_DIR/build/artifacts:/artifacts --volumes-from maven --link mysql:mysql artifact-builder
+docker run --rm -v $ROOT_DIR/build/results:/results -e LEXEVS_BRANCH=$LEXEVS_BRANCH -e LEXEVS_REPO=$LEXEVS_REPO -e LEXEVS_REMOTE_BRANCH=$LEXEVS_REMOTE_BRANCH -e LEXEVS_REMOTE_REPO=$LEXEVS_REMOTE_REPO -e URI_RESOLVER_BRANCH=$URI_RESOLVER_BRANCH -e URI_RESOLVER_REPO=$URI_RESOLVER_REPO -e TEST_OPTIONS=$TEST_OPTIONS -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/lexevs-remote:/lexevs-remote -v $ROOT_DIR/build/artifacts:/artifacts --volumes-from maven --link mysql:mysql artifact-builder
 cd ..
 
-cd uriresolver
-docker build -t uriresolver .
-URIRESOLVER_CONTAINER=$(docker run -d --name uriresolver -p 8001:8080 -v $ROOT_DIR/build/artifacts:/artifacts --link mysql:mysql uriresolver)
-cd ..
+#cd uriresolver
+#docker build -t uriresolver .
+#URIRESOLVER_CONTAINER=$(docker run -d --name uriresolver -p 8001:8080 -v $ROOT_DIR/build/artifacts:/artifacts --link mysql:mysql uriresolver)
+#cd ..
 
-cd lexevs-cts2-builder
-docker build -t lexevs-cts2-builder .
-docker run --rm -e LEXEVS_SERVICE_BRANCH=$LEXEVS_SERVICE_BRANCH -e LEXEVS_SERVICE_REPO=$LEXEVS_SERVICE_REPO -v $ROOT_DIR/build/results:/results -v $ROOT_DIR/build/artifacts:/artifacts --volumes-from maven -e "uriResolutionServiceUrl=http://uriresolver:8080/uriresolver/" --link uriresolver:uriresolver lexevs-cts2-builder
-cd ..
+
+#cd lexevs-cts2-builder
+#docker build -t lexevs-cts2-builder .
+#docker run --rm -e LEXEVS_SERVICE_BRANCH=$LEXEVS_SERVICE_BRANCH -e LEXEVS_SERVICE_REPO=$LEXEVS_SERVICE_REPO -v $ROOT_DIR/build/results:/results -v $ROOT_DIR/build/artifacts:/artifacts --volumes-from maven -e "uriResolutionServiceUrl=http://uriresolver:8080/uriresolver/" --link uriresolver:uriresolver lexevs-cts2-builder
+#cd ..
+
+#
+# Determine if uriresolver and lexevs-service should be built
+#
+if [[ "$TEST_OPTIONS" ==  *"-skipCts2"* ]]; 
+then 
+	echo "** SKIP CTS2. URIRESOLVER will not be built **"; 
+	echo "** SKIP CTS2. LEXEVS-SERVICE will not be built **"; 
+else
+	echo "** Building URIRESOLVER **"; 
+	cd uriresolver
+	docker build -t uriresolver .
+	URIRESOLVER_CONTAINER=$(docker run -d --name uriresolver -p 8001:8080 -v $ROOT_DIR/build/artifacts:/artifacts --link mysql:mysql uriresolver)
+	cd ..
+	
+	echo "** Building LEXEVS-SERVICE **"; 
+	cd lexevs-cts2-builder
+	docker build -t lexevs-cts2-builder .
+	docker run --rm -e LEXEVS_SERVICE_BRANCH=$LEXEVS_SERVICE_BRANCH -e LEXEVS_SERVICE_REPO=$LEXEVS_SERVICE_REPO -v $ROOT_DIR/build/results:/results -v $ROOT_DIR/lexevs-cts2:/lexevs-cts2-local -v $ROOT_DIR/build/artifacts:/artifacts --volumes-from maven -e "uriResolutionServiceUrl=http://uriresolver:8080/uriresolver/" --link uriresolver:uriresolver lexevs-cts2-builder
+	cd ..
+	
+fi
 
 cd lexevs-testrunner
 docker build -t lexevs-testrunner .
@@ -108,44 +143,66 @@ docker build -t lexevs-load .
 docker run --rm -v $ROOT_DIR/build/lexevs:/lexevs --link mysql:mysql lexevs-load
 cd ..
 
-cd lexevs-remote
-docker build -t lexevs-remote .
-LEXEVS_REMOTE_CONTAINER=$(docker run -d --name lexevs-remote -p 8000:8080 -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/artifacts:/artifacts --link mysql:mysql lexevs-remote)
-cd ..
+#
+# Determine if lexevs-remote should be built
+#
 
-cd lexevs-cts2
-docker build -t lexevs-cts2 .
-LEXEVS_CTS2_CONTAINER=$(docker run -d --name lexevs-cts2 -p 8002:8080  -e USER_HOME=/home/tomcata  -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/artifacts:/artifacts --link mysql:mysql --link uriresolver:uriresolver lexevs-cts2)
-cd ..
+if [[ "$TEST_OPTIONS" == *"-skipRemote"* ]];
+then
+	echo "** SKIP LEXEVS-REMOTE.  LEXEVS-REMTOE container will not be built. **"; 
+else
+	cd lexevs-remote
+	docker build -t lexevs-remote .
+	LEXEVS_REMOTE_CONTAINER=$(docker run -d --name lexevs-remote -p 8000:8080 -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/artifacts:/artifacts --link mysql:mysql lexevs-remote)
+	cd ..
+fi
 
-cd lexevs-cts2-testrunner
-docker build -t lexevs-cts2-testrunner .
-docker run --rm -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/results:/results --link lexevs-cts2:lexevs-cts2 lexevs-cts2-testrunner
-cd ..
+#
+# Determine if lexevs-cts2 and lexevs-cts2-testrunner should be built
+#
+if [[ "$TEST_OPTIONS" == *"-skipCts2"* ]]; 
+then 
+	echo "** SKIP CTS2. LEXEVS-CTS2 container will not be deployed **"; 
+	echo "** SKIP CTS2. LEXEVS-CTS2-TESTRUNNER will not be built **"; 
+else
+	cd lexevs-cts2
+	docker build -t lexevs-cts2 .
+	LEXEVS_CTS2_CONTAINER=$(docker run -d --name lexevs-cts2 -p 8002:8080  -e USER_HOME=/home/tomcata  -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/artifacts:/artifacts --link mysql:mysql --link uriresolver:uriresolver lexevs-cts2)
+	cd ..
 
-cd lexevs-remote-testrunner
-docker build -t lexevs-remote-testrunner .
-docker run --rm -v $ROOT_DIR/build/lexevs-remote:/lexevs-remote -v $ROOT_DIR/build/results:/results --link lexevs-remote:lexevs-remote lexevs-remote-testrunner
-cd ..
+	cd lexevs-cts2-testrunner
+	docker build -t lexevs-cts2-testrunner .
+	docker run --rm -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/results:/results --link lexevs-cts2:lexevs-cts2 lexevs-cts2-testrunner
+	cd ..
+fi	
 
+if [[ "$TEST_OPTIONS" == *"-skipRemote"* ]];
+then
+	echo "** SKIP LEXEVS-REMOTE-TESTRUNNER.  LEXEVS-REMTOE-TESTRUNNER will not be built. **"; 
+else	
+	cd lexevs-remote-testrunner
+	docker build -t lexevs-remote-testrunner .
+	docker run --rm -v $ROOT_DIR/build/lexevs-remote:/lexevs-remote -v $ROOT_DIR/build/results:/results --link lexevs-remote:lexevs-remote lexevs-remote-testrunner
+	cd ..
+fi
 
 echo
 echo ************** LEXEVS_REMOTE_CONTAINER
 echo
 
-docker exec lexevs-remote cat /local/content/tomcat/container/logs/catalina.out
+#docker exec lexevs-remote cat /local/content/tomcat/container/logs/catalina.out
 
 echo
 echo ************** LEXEVS_CTS2_CONTAINER
 echo
 
-docker exec lexevs-cts2 cat /local/content/tomcat/container/logs/catalina.out
+#docker exec lexevs-cts2 cat /local/content/tomcat/container/logs/catalina.out
 
 echo
 echo ************** URIRESOLVER_CONTAINER
 echo
 
-docker exec uriresolver cat /local/content/tomcat/container/logs/catalina.out
+#docker exec uriresolver cat /local/content/tomcat/container/logs/catalina.out
 
 
 echo
@@ -154,14 +211,36 @@ echo
 
 docker logout ncidockerhub.nci.nih.gov
 
-docker stop $LEXEVS_CTS2_CONTAINER
-docker stop $URIRESOLVER_CONTAINER
-docker stop $LEXEVS_REMOTE_CONTAINER
+
+#Determine which containers to stop based on what was built
+
+if [[ $TEST_OPTIONS != *"-skipCts2"* ]];
+then
+	docker stop $LEXEVS_CTS2_CONTAINER
+	docker stop $URIRESOLVER_CONTAINER
+fi
+
+if [[ $TEST_OPTIONS != *"-skipRemote"* ]];
+then
+	docker stop $LEXEVS_REMOTE_CONTAINER
+fi
+
 docker stop $MAVEN_CONTAINER
 docker stop $MYSQL_CONTAINER
 
-docker rm $LEXEVS_CTS2_CONTAINER
-docker rm $URIRESOLVER_CONTAINER
-docker rm $LEXEVS_REMOTE_CONTAINER
+
+#Determine which containers to remove based on what was built
+
+if [[ $TEST_OPTIONS != *"-skipCts2"* ]];
+then
+	docker rm $LEXEVS_CTS2_CONTAINER
+	docker rm $URIRESOLVER_CONTAINER
+fi
+
+if [[ $TEST_OPTIONS != *"-skipRemote"* ]];
+then
+	docker rm $LEXEVS_REMOTE_CONTAINER
+fi
+
 docker rm $MAVEN_CONTAINER
 docker rm $MYSQL_CONTAINER
