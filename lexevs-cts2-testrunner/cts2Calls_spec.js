@@ -9,11 +9,6 @@
 
 var frisby = require('frisby');
 
-// Global setup for all tests
-frisby.globalSetup({
-    timeout: (15 * 1000) // 15 seconds
-});
-
 const Joi = frisby.Joi; // Frisby exposes Joi for convenience
 
 var cts2Version = '1.3.3.FINAL';
@@ -45,6 +40,7 @@ describe('CTS2 integration tests', function() {
     		structuralProfile:"SP_VALUE_SET",
    			structuralProfile:"SP_MAP_VERSION"
          })
+        .timeout(60000) //waits 60sec for response    
 	    .done(done);
 	});
 
@@ -70,6 +66,7 @@ describe('CTS2 integration tests', function() {
          	.expect('json', 'EntityDirectory.heading', {
            	 	resourceURI: 'entities'
          	})
+            .timeout(60000) //waits 60sec for response
 	    	.done(done);
 		});
 
@@ -92,6 +89,7 @@ describe('CTS2 integration tests', function() {
          	.expect('json', 'EntityDirectory.entry.*.name', {
            	 	name: 'A0001'
          	})
+            .timeout(60000) //waits 60sec for response
 	    	.done(done);
 		});
 	    	
@@ -118,6 +116,7 @@ describe('CTS2 integration tests', function() {
             	entryState: Joi.string(),
             	about: Joi.string()
           	})
+            .timeout(60000) //waits 60sec for response 
 	    	.done(done);
 		});
 
@@ -148,6 +147,7 @@ describe('CTS2 integration tests', function() {
            	 	complete: 'COMPLETE',
            	 	numEntries: 8
          	})
+            .timeout(60000) //waits 60sec for response
 	    	.done(done);
 		});
 
@@ -173,7 +173,7 @@ describe('CTS2 integration tests', function() {
            	 	complete: 'COMPLETE',
            	 	numEntries: 2
          	})
-        
+            .timeout(60000) //waits 60sec for response
 	    	.done(done);
 		});
 
@@ -194,7 +194,7 @@ describe('CTS2 integration tests', function() {
            	 	complete: 'COMPLETE',
            	 	numEntries: 1
          	})
-        
+            .timeout(60000) //waits 60sec for response
 	    	.done(done);
 		});
 	
@@ -220,7 +220,7 @@ describe('CTS2 integration tests', function() {
          	.expect('json', 'CodeSystemVersionCatalogEntryMsg.codeSystemVersionCatalogEntry.resourceSynopsis', {
            	 	value: 'Automobiles'
          	})
-        
+            .timeout(60000) //waits 60sec for response
 	    	.done(done);
 		});
 
@@ -263,7 +263,7 @@ describe('CTS2 integration tests', function() {
            	 	complete: 'COMPLETE',
            	 	numEntries: 22
          	})
-        
+            .timeout(60000) //waits 60sec for response
 	    	.done(done);
 		});
 
@@ -296,6 +296,7 @@ describe('CTS2 integration tests', function() {
            	 	namespace: 'owl',
            	 	name: 'Class'
          	})
+            .timeout(60000) //waits 60sec for response
 	    	.done(done);
 		});
 
@@ -318,6 +319,7 @@ describe('CTS2 integration tests', function() {
            	 	namespace: 'Automobiles',
            	 	name: 'C0011(5564)'
          	})
+            .timeout(60000) //waits 60sec for response
 	    	.done(done);
 		});
 
@@ -341,7 +343,8 @@ describe('CTS2 integration tests', function() {
          	.expect('json', 'AssociationDirectory.entry.*.predicate', {
            	 	uri: 'urn:oid:1.3.6.1.4.1.2114.108.1.8.1',
            	 	name: 'hasSubtype'
-         	})   	
+         	})   
+            .timeout(60000) //waits 60sec for response
 	    	.done(done);
 		});
 
@@ -365,7 +368,8 @@ describe('CTS2 integration tests', function() {
          	.expect('json', 'AssociationDirectory.entry.*.predicate', {
            	 	uri: 'urn:oid:1.3.6.1.4.1.2114.108.1.8.1',
            	 	name: 'hasSubtype'
-         	})   	
+         	})  
+            .timeout(60000) //waits 60sec for response
 	    	.done(done);
 		});
 
@@ -394,6 +398,7 @@ describe('CTS2 integration tests', function() {
 // 				href:  baseURL + 'valueset/All Domestic Autos But GM',
 				resourceName: 'All Domestic Autos But GM'
          	})
+            .timeout(60000) //waits 60sec for response
 	    	.done(done);
 		});
 	
@@ -422,6 +427,7 @@ describe('CTS2 integration tests', function() {
 // 				href:  baseURL + 'valueset/All Domestic Autos But GM',
 				resourceName: 'All Domestic Autos But GM'
          	})
+            .timeout(60000) //waits 60sec for response
 	    	.done(done);
 		});
 
@@ -445,6 +451,7 @@ describe('CTS2 integration tests', function() {
          	.expect('json', 'ValueSetCatalogEntryMsg.valueSetCatalogEntry.currentDefinition.valueSet', {
            	 	content: 'All Domestic Autos AND GM'
          	})
+            .timeout(60000) //waits 60sec for response
 	    	.done(done);
 		});
 
@@ -481,6 +488,7 @@ describe('CTS2 integration tests', function() {
          	.expect('json', 'ValueSetDefinitionMsg.valueSetDefinition.sourceAndNotation', {
            	 	sourceAndNotationDescription: 'LexEVS'
          	})
+            .timeout(60000) //waits 60sec for response
 	    	.done(done);
 		});
 
@@ -498,7 +506,8 @@ describe('CTS2 integration tests', function() {
          	.expect('json', 'ResolvedValueSetDirectory.entry.?', {
            	 	resolvedValueSetURI: "SRITEST:AUTO:AllDomesticButGM",
            	 	resolvedValueSetURI: "SRITEST:AUTO:AllDomesticButGMWithlt250charName"
-         	})         	
+         	})   
+            .timeout(60000) //waits 60sec for response
 	    	.done(done);
 		});
 
@@ -519,7 +528,8 @@ describe('CTS2 integration tests', function() {
            	 	about: 'urn:oid:mapping:sample',
            	 	formalName: 'MappingSample',
 //            	 	href: baseURL + 'map/Mapping Sample/version/Mapping Sample-1.0'
-         	})         	
+         	})       
+            .timeout(60000) //waits 60sec for response
 	    	.done(done);
 		});
 
@@ -541,7 +551,8 @@ describe('CTS2 integration tests', function() {
            	 	about: 'urn:oid:mapping:sample',
            	 	formalName: 'MappingSample',
 //            	 	href: baseURL + 'map/Mapping Sample/version/Mapping Sample-1.0'
-         	})         	
+         	})    
+            .timeout(60000) //waits 60sec for response
 	    	.done(done);
 		});
 
@@ -567,7 +578,8 @@ describe('CTS2 integration tests', function() {
          	})  
          	.expect('json', 'MapCatalogEntryMsg.map.resourceSynopsis', {
            	 	value: 'Mapping Sample',
-         	})           	
+         	})  
+            .timeout(60000) //waits 60sec for response
 	    	.done(done);
 		});
 
@@ -597,6 +609,7 @@ describe('CTS2 integration tests', function() {
          	.expect('json', 'MapVersionDirectory.entry.*.resourceSynopsis', {
            	 	value: "Mapping Sample"
          	})
+            .timeout(60000) //waits 60sec for response
 	    	.done(done);
 		});
 		
@@ -629,6 +642,7 @@ describe('CTS2 integration tests', function() {
          	.expect('json', 'MapVersionMsg.mapVersion.sourceAndNotation', {
            	 	sourceAndNotationDescription: "LexEVS"
          	})
+            .timeout(60000) //waits 60sec for response
 	    	.done(done);
 		});
 
@@ -664,6 +678,7 @@ describe('CTS2 integration tests', function() {
            	 	namespace: 'Automobiles',
            	 	name: 'A0001',
          	})
+            .timeout(60000) //waits 60sec for response
 	    	.done(done);
 		});
 
@@ -695,6 +710,7 @@ describe('CTS2 integration tests', function() {
            	 	processingRule: 'ALL_MATCHES',
            	 	entryOrder: 1           
          	})
+            .timeout(60000) //waits 60sec for response
 	    	.done(done);
 		});
 		
