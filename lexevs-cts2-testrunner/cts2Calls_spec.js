@@ -8,6 +8,12 @@
 // using the content that is loaded during the lexevs-load.
 
 var frisby = require('frisby');
+
+// Global setup for all tests
+frisby.globalSetup({
+    timeout: (15 * 1000) // 15 seconds
+});
+
 const Joi = frisby.Joi; // Frisby exposes Joi for convenience
 
 var cts2Version = '1.3.3.FINAL';
