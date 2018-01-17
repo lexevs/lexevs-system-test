@@ -13,7 +13,7 @@ const Joi = frisby.Joi; // Frisby exposes Joi for convenience
 
 var cts2Version = '1.3.3.FINAL';
 
-var timeoutSeconds = 1000 * 60;
+var timeoutSeconds = 1000 * 300;
 
 // Get the parameter passed in from the command line
 //var baseURL = 'http://localhost:8888/cts2_65/';
