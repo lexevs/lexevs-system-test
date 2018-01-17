@@ -13,7 +13,7 @@ const Joi = frisby.Joi; // Frisby exposes Joi for convenience
 
 var cts2Version = '1.3.3.FINAL';
 
-var timeoutSeconds = 1000 * 15;
+var timeoutSeconds = 1000 * 60;
 
 // Get the parameter passed in from the command line
 //var baseURL = 'http://localhost:8888/cts2_65/';
@@ -45,7 +45,7 @@ describe('CTS2 integration tests', function() {
    			structuralProfile:"SP_MAP_VERSION"
          })
         .done(done);
-	}, 15000);
+	}, timeoutSeconds);
 
 //*********************************************************************
 // Count entities
@@ -72,7 +72,7 @@ describe('CTS2 integration tests', function() {
            	 	resourceURI: 'entities'
          	})
             .done(done);
-		}, 15000);
+		}, timeoutSeconds);
 
 //*********************************************************************
 // entities search for automobile
@@ -96,7 +96,7 @@ describe('CTS2 integration tests', function() {
            	 	name: 'A0001'
          	})
             .done(done);
-		}, 15000);
+		}, timeoutSeconds);
 	    	
 //*********************************************************************
 // entities read 
@@ -124,7 +124,7 @@ describe('CTS2 integration tests', function() {
             	about: Joi.string()
           	})
             .done(done);
-		}, 15000);
+		}, timeoutSeconds);
 
 //*********************************************************************
 // codesystemversions - search all
@@ -156,7 +156,7 @@ describe('CTS2 integration tests', function() {
            	 	numEntries: 8
          	})
             .done(done);
-		}, 15000);
+		}, timeoutSeconds);
 
 //*********************************************************************
 // codesystemversions - search automobile
@@ -183,7 +183,7 @@ describe('CTS2 integration tests', function() {
            	 	numEntries: 2
          	})
             .done(done);
-		}, 15000);
+		}, timeoutSeconds);
 
 //*********************************************************************
 // codesystemversions - exact search Automobiles-1.0
@@ -205,7 +205,7 @@ describe('CTS2 integration tests', function() {
            	 	numEntries: 1
          	})
             .done(done);
-		}, 15000);
+		}, timeoutSeconds);
 	
 //*********************************************************************
 // codesystemversion - read by version ID
@@ -232,7 +232,7 @@ describe('CTS2 integration tests', function() {
            	 	value: 'Automobiles'
          	})
             .done(done);
-		}, 15000);
+		}, timeoutSeconds);
 
 //*********************************************************************
 // codesystemversion - search entities
@@ -276,7 +276,7 @@ describe('CTS2 integration tests', function() {
            	 	numEntries: 22
          	})
             .done(done);
-		}, 15000);
+		}, timeoutSeconds);
 
 //*********************************************************************
 // codesystemversion - read an entity by id
@@ -310,7 +310,7 @@ describe('CTS2 integration tests', function() {
            	 	name: 'Class'
          	})
             .done(done);
-		}, 15000);
+		}, timeoutSeconds);
 
 //*********************************************************************
 // associations - get children
@@ -334,7 +334,7 @@ describe('CTS2 integration tests', function() {
            	 	name: 'C0011(5564)'
          	})
             .done(done);
-		}, 15000);
+		}, timeoutSeconds);
 
 //*********************************************************************
 // associations - subjectof
@@ -360,7 +360,7 @@ describe('CTS2 integration tests', function() {
            	 	name: 'hasSubtype'
          	})   
             .done(done);
-		}, 15000);
+		}, timeoutSeconds);
 
 //*********************************************************************
 // associations - targetof
@@ -386,7 +386,7 @@ describe('CTS2 integration tests', function() {
            	 	name: 'hasSubtype'
          	})  
             .done(done);
-		}, 15000);
+		}, timeoutSeconds);
 
 //*********************************************************************
 // valuesets - search (all)
@@ -416,7 +416,7 @@ describe('CTS2 integration tests', function() {
 				resourceName: 'All Domestic Autos But GM'
          	})
             .done(done);
-		}, 15000);
+		}, timeoutSeconds);
 	
 //*********************************************************************
 // valuesets - search (Auto)
@@ -446,7 +446,7 @@ describe('CTS2 integration tests', function() {
 				resourceName: 'All Domestic Autos But GM'
          	})
             .done(done);
-		}, 15000);
+		}, timeoutSeconds);
 
 //*********************************************************************
 // valuesets - read a valueset
@@ -471,7 +471,7 @@ describe('CTS2 integration tests', function() {
            	 	content: 'All Domestic Autos AND GM'
          	})
             .done(done);
-		}, 15000);
+		}, timeoutSeconds);
 
 //*********************************************************************
 // valuesets - resolve a valueset definition by id
@@ -509,7 +509,7 @@ describe('CTS2 integration tests', function() {
            	 	sourceAndNotationDescription: 'LexEVS'
          	})
             .done(done);
-		}, 15000);
+		}, timeoutSeconds);
 
 //*********************************************************************
 // valuesets - search all pre-resolved value set definitions
@@ -529,7 +529,7 @@ describe('CTS2 integration tests', function() {
            	 	resolvedValueSetURI: "SRITEST:AUTO:AllDomesticButGMWithlt250charName"
          	})   
             .done(done);
-		}, 15000);
+		}, timeoutSeconds);
 
 //*********************************************************************
 // maps - search map version summaries (empty search)
@@ -552,7 +552,7 @@ describe('CTS2 integration tests', function() {
 //            	 	href: baseURL + 'map/Mapping Sample/version/Mapping Sample-1.0'
          	})       
             .done(done);
-		}, 15000);
+		}, timeoutSeconds);
 
 //*********************************************************************
 // maps - search map version summaries (with search criteria)
@@ -576,7 +576,7 @@ describe('CTS2 integration tests', function() {
 //            	 	href: baseURL + 'map/Mapping Sample/version/Mapping Sample-1.0'
          	})    
             .done(done);
-		}, 15000);
+		}, timeoutSeconds);
 
 //*********************************************************************
 // maps - read map by map id
@@ -604,7 +604,7 @@ describe('CTS2 integration tests', function() {
            	 	value: 'Mapping Sample',
          	})  
             .done(done);
-		}, 15000);
+		}, timeoutSeconds);
 
 //*********************************************************************
 // maps - read map versions of map by map id
@@ -635,7 +635,7 @@ describe('CTS2 integration tests', function() {
            	 	value: "Mapping Sample"
          	})
             .done(done);
-		}, 15000);
+		}, timeoutSeconds);
 		
 //*********************************************************************
 // maps - read spoecific version of a map by map id
@@ -669,7 +669,7 @@ describe('CTS2 integration tests', function() {
            	 	sourceAndNotationDescription: "LexEVS"
          	})
             .done(done);
-		}, 15000);
+		}, timeoutSeconds);
 
 //*********************************************************************
 // maps - read entries of a specific version of a map by map id
@@ -706,7 +706,7 @@ describe('CTS2 integration tests', function() {
            	 	name: 'A0001',
          	})
             .done(done);
-		}, 15000);
+		}, timeoutSeconds);
 
 //*********************************************************************
 // maps - restrict entry of a specific version of a map by map id
@@ -739,6 +739,6 @@ describe('CTS2 integration tests', function() {
            	 	entryOrder: 1           
          	})
 	    	.done(done);
-		}, 15000);
+		}, timeoutSeconds);
 		
 });
