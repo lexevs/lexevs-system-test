@@ -190,19 +190,19 @@ echo
 echo ************** LEXEVS_REMOTE_CONTAINER
 echo
 
-#docker exec lexevs-remote cat /local/content/tomcat/container/logs/catalina.out
+docker exec lexevs-remote cat /local/content/tomcat/container/logs/catalina.out
 
 echo
 echo ************** LEXEVS_CTS2_CONTAINER
 echo
 
-#docker exec lexevs-cts2 cat /local/content/tomcat/container/logs/catalina.out
+docker exec lexevs-cts2 cat /local/content/tomcat/container/logs/catalina.out
 
 echo
 echo ************** URIRESOLVER_CONTAINER
 echo
 
-#docker exec uriresolver cat /local/content/tomcat/container/logs/catalina.out
+docker exec uriresolver cat /local/content/tomcat/container/logs/catalina.out
 
 
 echo
