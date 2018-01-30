@@ -9,4 +9,4 @@ ADD uriresolver.properties /home/tomcata/.cts2_uri/
 ADD --chown=tomcata run.sh /home/tomcata/
 RUN chmod 755 /home/tomcata/run.sh
 
-ADD /artifacts/uriresolver.war /local/content/tomcat/container/webapps
+ADD ./artifacts/uriresolver.war /local/content/tomcat/container/webapps

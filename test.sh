@@ -78,11 +78,21 @@ fi
 
 rm -rf $ROOT_DIR/build
 
+# add artifacts to local directories so dockerfiles have access to them
+rm -rf $ROOT_DIR/uriresolver/artifacts
+rm -rf $ROOT_DIR/lexevs-remote/artifacts
+rm -rf $ROOT_DIR/lexevs-cts2/artifacts
+
 mkdir $ROOT_DIR/build
 mkdir $ROOT_DIR/build/artifacts
 mkdir $ROOT_DIR/build/results
 mkdir $ROOT_DIR/build/lexevs
 mkdir $ROOT_DIR/build/lexevs-remote
+
+mkdir $ROOT_DIR/uriresolver/artifacts
+mkdir $ROOT_DIR/lexevs-remote/artifacts
+mkdir $ROOT_DIR/lexevs-cts2/artifacts
+
 
 MAVEN_CONTAINER=$(docker run -d -P --name maven -v ~/.m2:/root/.m2:rw -v ~/.ivy2:/root/.ivy2:rw ubuntu)
 
@@ -95,19 +105,9 @@ cd ..
 
 cd artifact-builder
 docker build -t artifact-builder .
-docker run --rm -v $ROOT_DIR/build/results:/results -e LEXEVS_BRANCH=$LEXEVS_BRANCH -e LEXEVS_REPO=$LEXEVS_REPO -e LEXEVS_REMOTE_BRANCH=$LEXEVS_REMOTE_BRANCH -e LEXEVS_REMOTE_REPO=$LEXEVS_REMOTE_REPO -e URI_RESOLVER_BRANCH=$URI_RESOLVER_BRANCH -e URI_RESOLVER_REPO=$URI_RESOLVER_REPO -e TEST_OPTIONS=$TEST_OPTIONS -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/lexevs-remote:/lexevs-remote -v $ROOT_DIR/build/artifacts:/artifacts --volumes-from maven --link mysql:mysql artifact-builder
+docker run --rm -v $ROOT_DIR/build/results:/results -e LEXEVS_BRANCH=$LEXEVS_BRANCH -e LEXEVS_REPO=$LEXEVS_REPO -e LEXEVS_REMOTE_BRANCH=$LEXEVS_REMOTE_BRANCH -e LEXEVS_REMOTE_REPO=$LEXEVS_REMOTE_REPO -e URI_RESOLVER_BRANCH=$URI_RESOLVER_BRANCH -e URI_RESOLVER_REPO=$URI_RESOLVER_REPO -e TEST_OPTIONS=$TEST_OPTIONS -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/lexevs-remote:/lexevs-remote -v $ROOT_DIR/build/artifacts:/artifacts -v $ROOT_DIR/lexevs-remote/artifacts:/lexevs-remote-local -v $ROOT_DIR/uriresolver/artifacts:/uriresolver-local --volumes-from maven --link mysql:mysql artifact-builder
 cd ..
 
-#cd uriresolver
-#docker build -t uriresolver .
-#URIRESOLVER_CONTAINER=$(docker run -d --name uriresolver -p 8001:8080 -v $ROOT_DIR/build/artifacts:/artifacts --link mysql:mysql uriresolver)
-#cd ..
-
-
-#cd lexevs-cts2-builder
-#docker build -t lexevs-cts2-builder .
-#docker run --rm -e LEXEVS_SERVICE_BRANCH=$LEXEVS_SERVICE_BRANCH -e LEXEVS_SERVICE_REPO=$LEXEVS_SERVICE_REPO -v $ROOT_DIR/build/results:/results -v $ROOT_DIR/build/artifacts:/artifacts --volumes-from maven -e "uriResolutionServiceUrl=http://uriresolver:8080/uriresolver/" --link uriresolver:uriresolver lexevs-cts2-builder
-#cd ..
 
 #
 # Determine if uriresolver and lexevs-service should be built
@@ -126,7 +126,7 @@ else
 	echo "** Building LEXEVS-SERVICE **"; 
 	cd lexevs-cts2-builder
 	docker build -t lexevs-cts2-builder .
-	docker run --rm -e LEXEVS_SERVICE_BRANCH=$LEXEVS_SERVICE_BRANCH -e LEXEVS_SERVICE_REPO=$LEXEVS_SERVICE_REPO -v $ROOT_DIR/build/results:/results -v $ROOT_DIR/lexevs-cts2:/lexevs-cts2-local -v $ROOT_DIR/build/artifacts:/artifacts --volumes-from maven -e "uriResolutionServiceUrl=http://uriresolver:8080/uriresolver/" --link uriresolver:uriresolver lexevs-cts2-builder
+	docker run --rm -e LEXEVS_SERVICE_BRANCH=$LEXEVS_SERVICE_BRANCH -e LEXEVS_SERVICE_REPO=$LEXEVS_SERVICE_REPO -v $ROOT_DIR/build/results:/results -v $ROOT_DIR/lexevs-cts2/artifacts:/lexevs-cts2-local -v $ROOT_DIR/build/artifacts:/artifacts --volumes-from maven -e "uriResolutionServiceUrl=http://uriresolver:8080/uriresolver/" --link uriresolver:uriresolver lexevs-cts2-builder
 	cd ..
 	
 fi

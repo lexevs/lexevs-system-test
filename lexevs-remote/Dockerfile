@@ -12,4 +12,4 @@ ADD --chown=tomcata lexevs.properties /home/tomcata/
 ADD --chown=tomcata setenv.sh /local/content/tomcat/container/bin/
 RUN chmod 755 /local/content/tomcat/container/bin/setenv.sh
 
-ADD /artifacts/lexevsapi65.war /local/content/tomcat/container/webapps/
+ADD ./artifacts/lexevsapi65.war /local/content/tomcat/container/webapps/
