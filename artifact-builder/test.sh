@@ -33,6 +33,8 @@ else
     	cp /lexevs/runtime-components/lexbig.jar system/lib/ && \
     	cp /lexevs/test/lbTest.jar test/lib/ && \
     	ant && \
+    	# copy lexevs-remote artifact to local artifacts
+        cp output/lexevsapi65/package/webapp/*.tomcat.war /lexevs-remote-local/lexevsapi65.war && \
     	mv output/lexevsapi65/package/webapp/*.tomcat.war /artifacts/lexevsapi65.war && \
     	cp -r ../* /lexevs-remote/
 fi	    
@@ -49,7 +51,9 @@ else
 	cd $BUILDDIR
 	git clone -b $URI_RESOLVER_BRANCH $URI_RESOLVER_REPO && \
 	   	cd URI_Resolver && \
-    	mvn clean install && \   
+    	mvn clean install && \  
+        # copy uriresolver artifact to local artifacts
+        cp target/*.war /uriresolver-local/uriresolver.war && \   
     	mv target/*.war /artifacts/uriresolver.war && \
     	mkdir /results/uriresolver && \
     	cp -R target/surefire-reports/* /results/uriresolver/
