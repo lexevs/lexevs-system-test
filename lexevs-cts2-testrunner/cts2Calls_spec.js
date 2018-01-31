@@ -250,13 +250,19 @@ describe('CTS2 integration tests', function() {
          	})
          	.expect('json', 'EntityDirectory.entry.*.name', {
            	 	namespace: 'Automobiles',
+           	 	name: 'A0001',
+           	 	
+           	 	namespace: 'Automobiles',
+           	 	name: 'GM',
+           	 	
+           	 	namespace: 'Automobiles',
            	 	name: 'C0011(5564)',
            	 	
            	 	namespace: 'Automobiles',
-           	 	name: 'Ford',
+           	 	name: 'Ford',   
            	 	
            	 	namespace: 'Automobiles',
-           	 	name: 'A0001'
+           	 	name: 'T0001'         	 	
          	})
          	.expect('json', 'EntityDirectory.entry.*.knownEntityDescription', {
 //            	 	href: baseURL + 'codesystem/Automobiles/version/1.0/entity/C0011(5564)',
@@ -353,7 +359,7 @@ describe('CTS2 integration tests', function() {
          	.expect('json', 'AssociationDirectory.entry.*.subject', {
            	 	uri: 'urn:oid:11.11.0.1:C0001',
            	 	namespace: 'Automobiles',
-           	 	name: 'C0011'
+           	 	name: 'C0001'
          	})
          	.expect('json', 'AssociationDirectory.entry.*.predicate', {
            	 	uri: 'urn:oid:1.3.6.1.4.1.2114.108.1.8.1',
@@ -379,7 +385,7 @@ describe('CTS2 integration tests', function() {
          	.expect('json', 'AssociationDirectory.entry.*.subject', {
            	 	uri: 'urn:oid:11.11.0.1:C0001',
            	 	namespace: 'Automobiles',
-           	 	name: 'C0011'
+           	 	name: 'C0001'
          	})
          	.expect('json', 'AssociationDirectory.entry.*.predicate', {
            	 	uri: 'urn:oid:1.3.6.1.4.1.2114.108.1.8.1',
@@ -691,10 +697,6 @@ describe('CTS2 integration tests', function() {
            	 	resourceName: 'Automobiles:005',
            	 	resourceName: 'Automobiles:Ford',
            	 	resourceName: 'Automobiles_Different_NS:C0002',
-         	})
-         	.expect('json', 'MapEntryDirectory.entry.*.map', {
-           	 	content: 'Mapping Sample',
-// 				href: baseURL + 'map/Mapping Sample'
          	})
          	.expect('json', 'MapEntryDirectory.entry.*.mapFrom', {
            	 	uri: 'urn:oid:11.11.0.1:Jaguar',
