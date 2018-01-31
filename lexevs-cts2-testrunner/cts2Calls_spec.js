@@ -13,7 +13,7 @@ const Joi = frisby.Joi; // Frisby exposes Joi for convenience
 
 var cts2Version = '1.3.3.FINAL';
 
-var timeoutSeconds = 1000 * 300;
+var timeoutSeconds = 1000 * 10;
 
 // Get the parameter passed in from the command line
 //var baseURL = 'http://localhost:8888/cts2_65/';
@@ -250,17 +250,21 @@ describe('CTS2 integration tests', function() {
          	})
          	.expect('json', 'EntityDirectory.entry.*.name', {
            	 	namespace: 'Automobiles',
-           	 	name: 'A0001',
-           	 	
+           	 	name: 'A0001',       	 	
+         	})
+         	.expect('json', 'EntityDirectory.entry.*.name', {          	 	
            	 	namespace: 'Automobiles',
-           	 	name: 'GM',
-           	 	
+           	 	name: 'GM',       	 	
+         	})
+         	.expect('json', 'EntityDirectory.entry.*.name', {          	 	
            	 	namespace: 'Automobiles',
-           	 	name: 'C0011(5564)',
-           	 	
+           	 	name: 'C0011(5564)',         	 	
+         	})
+         	.expect('json', 'EntityDirectory.entry.*.name', {          	 	         	 	
            	 	namespace: 'Automobiles',
-           	 	name: 'Ford',   
-           	 	
+           	 	name: 'Ford',       	 	
+         	})
+         	.expect('json', 'EntityDirectory.entry.*.name', {          	 	         	 	          	 	
            	 	namespace: 'Automobiles',
            	 	name: 'T0001'         	 	
          	})
@@ -702,7 +706,8 @@ describe('CTS2 integration tests', function() {
            	 	uri: 'urn:oid:11.11.0.1:Jaguar',
            	 	namespace: 'Automobiles',
            	 	name: 'Jaguar',
-           	 	
+         	})
+         	.expect('json', 'MapEntryDirectory.entry.*.mapFrom', {
            	 	uri: 'urn:oid:11.11.0.1:A0001',
            	 	namespace: 'Automobiles',
            	 	name: 'A0001',
