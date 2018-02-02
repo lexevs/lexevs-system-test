@@ -248,43 +248,48 @@ describe('CTS2 integration tests', function() {
            	 	about: 'urn:oid:11.11.0.1:Ford',
            	 	about: 'urn:oid:11.11.0.1:A0001'
          	})
-         	.expect('json', 'EntityDirectory.entry.*.name', {
-           	 	namespace: 'Automobiles',
-           	 	name: 'A0001',       	 	
-         	})
-         	.expect('json', 'EntityDirectory.entry.*.name', {          	 	
-           	 	namespace: 'Automobiles',
-           	 	name: 'GM',       	 	
-         	})
-         	.expect('json', 'EntityDirectory.entry.*.name', {          	 	
-           	 	namespace: 'Automobiles',
-           	 	name: 'C0011(5564)',         	 	
-         	})
-         	.expect('json', 'EntityDirectory.entry.*.name', {          	 	         	 	
-           	 	namespace: 'Automobiles',
-           	 	name: 'Ford',       	 	
-         	})
-         	.expect('json', 'EntityDirectory.entry.*.name', {          	 	         	 	          	 	
-           	 	namespace: 'Automobiles',
-           	 	name: 'T0001'         	 	
-         	})
-         	.expect('json', 'EntityDirectory.entry.*.knownEntityDescription', {
-//            	 	href: baseURL + 'codesystem/Automobiles/version/1.0/entity/C0011(5564)',
-           	 	designation: 'Car With Trailer',
+         	.expect('json', 'EntityDirectory.entry.?.name', {
+           	 	namespace: 'Automobiles',  
+           	 	name: 'GM', 
            	 	
-//            	 	href: baseURL + 'codesystem/Automobiles/version/1.0/entity/Ford',
-           	 	designation: 'Ford Motor Company',
+           	 	namespace: 'Automobiles',  
+           	 	name: 'A0001', 
            	 	
-//            	 	href: baseURL + 'codesystem/Automobiles/version/1.0/entity/A0001',
-           	 	designation: 'Automobile',
+           	 	namespace: 'Automobiles',  
+           	 	name: 'C0002', 
            	 	
-//            	 	href: baseURL + 'codesystem/Automobiles/version/1.0/entity/Chevy',
-           	 	designation: 'Chevrolet',           	 	
+           	 	namespace: 'Automobiles',  
+           	 	name: 'Chevy', 
+           	 	
+           	 	namespace: 'Automobiles',  
+           	 	name: '005', 
+           	 	
+           	 	namespace: 'Automobiles',  
+           	 	name: 'Ford',
+           	 	
+           	 	namespace: 'Automobiles',  
+           	 	name: 'C0001',
+           	 	
+           	 	namespace: 'Automobiles',  
+           	 	name: 'C0011(5564)',
+           	 	
+           	 	namespace: 'Automobiles',  
+           	 	name: 'C'
+         	})
+			.expect('json', 'EntityDirectory.entry.?.knownEntityDescription.?', {
+       	 		designation: 'Car With Trailer',      	 	
+       	 		designation: 'Ford Motor Company',       	 	
+       	 		designation: 'Automobile',    	 	
+       	 		designation: 'Chevrolet',
+       	 		designation: 'General Motors', 
+       	 		designation: 'Domestic Auto Makers VD', 
+       	 		designation: 'Kar', 
+       	 		designation: 'Chevrolet'             	 	
          	})
          	.expect('json', 'EntityDirectory', {
            	 	complete: 'COMPLETE',
            	 	numEntries: 22
-         	})
+         	})   
             .done(done);
 		}, timeoutSeconds);
 
@@ -702,15 +707,35 @@ describe('CTS2 integration tests', function() {
            	 	resourceName: 'Automobiles:Ford',
            	 	resourceName: 'Automobiles_Different_NS:C0002',
          	})
-         	.expect('json', 'MapEntryDirectory.entry.*.mapFrom', {
+         	.expect('json', 'MapEntryDirectory.entry.?.mapFrom', {
            	 	uri: 'urn:oid:11.11.0.1:Jaguar',
            	 	namespace: 'Automobiles',
            	 	name: 'Jaguar',
          	})
-         	.expect('json', 'MapEntryDirectory.entry.*.mapFrom', {
+         	.expect('json', 'MapEntryDirectory.entry.?.mapFrom', {
            	 	uri: 'urn:oid:11.11.0.1:A0001',
            	 	namespace: 'Automobiles',
            	 	name: 'A0001',
+         	})
+         	.expect('json', 'MapEntryDirectory.entry.?.mapFrom', {
+           	 	uri: 'urn:oid:11.11.0.1:005',
+           	 	namespace: 'Automobiles',
+           	 	name: '005',
+         	})
+         	.expect('json', 'MapEntryDirectory.entry.?.mapFrom', {
+           	 	uri: 'urn:oid:11.11.0.1:C0001',
+           	 	namespace: 'Automobiles',
+           	 	name: 'C0001',
+         	})
+         	.expect('json', 'MapEntryDirectory.entry.?.mapFrom', {
+           	 	uri: 'urn:oid:11.11.0.1:Ford',
+           	 	namespace: 'Automobiles',
+           	 	name: 'Ford',
+         	})
+         	.expect('json', 'MapEntryDirectory.entry.?.mapFrom', {
+           	 	uri: 'urn:oid:11.11.0.1:C0002',
+           	 	namespace: 'Automobiles_Different_NS',
+           	 	name: 'C0002',
          	})
             .done(done);
 		}, timeoutSeconds);
