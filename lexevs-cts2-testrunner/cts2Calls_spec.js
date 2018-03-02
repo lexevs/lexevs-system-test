@@ -415,7 +415,7 @@ describe('CTS2 integration tests', function() {
 				
 			.expect('json', 'ValueSetCatalogEntryDirectory', {
            	 	complete: "COMPLETE",
-           	 	numEntries: 23
+           	 	numEntries: 28
          	})
          	.expect('json', 'ValueSetCatalogEntryDirectory.entry.?', {
            	 	valueSetName: "Very Sick Cancer Patient",
