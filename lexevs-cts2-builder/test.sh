@@ -2,7 +2,7 @@ BUILDDIR='/build'
 
 mkdir $BUILDDIR && cd $BUILDDIR
 
-export MAVEN_OPTS="-Dhttps.protocols=TLSv1.1,TLSv1.2 -Dforce.http.jre.executor=true -Xmx3072m -XX:MaxPermSize=752m"
+export MAVEN_OPTS="-Dhttps.protocols=TLSv1.1,TLSv1.2 -Dforce.http.jre.executor=true -Xmx3072m"
 
 # LexEVS CTS2
 cd $BUILDDIR
