@@ -115,7 +115,7 @@ mkdir $ROOT_DIR/lexevs-cts2/artifacts
 #*****************************************************************
 # Artifacts that are built and tested to exist
 #*****************************************************************
-LEXEVS_ARTIFACT="$ROOT_DIR/build/lexevs/runtime-components/lexbig.jar"
+LEXEVS_ARTIFACT="$ROOT_DIR/build/lexevs/runtime-components/lexbig1.jar"
 URI_RESOLVER_ARTIFACT="$ROOT_DIR/build/artifacts/uriresolver.war"
 LEXEVS_REMOTE_ARTIFACT="$ROOT_DIR/build/artifacts/lexevsapi65.war"
 LEXEVS_CTS2_ARTIFACT="$ROOT_DIR/build/artifacts/lexevscts2.war"
@@ -200,7 +200,7 @@ if [[ ! -e "$LEXEVS_ARTIFACT" ]];
 then 
 	echo "LexEVS BUILD FAILED "
 	shutdownBuild
-	exit
+	exit 1
 else
 	echo "LexEVS BUILD SUCCESSFUL"
 fi
@@ -210,7 +210,7 @@ if [[ ! -e "$URI_RESOLVER_ARTIFACT" ]];
 then 
 	echo "URIRESOLVER BUILD FAILED "
 	shutdownBuild
-	exit
+	exit 1
 else
 	echo "URIRESOLVER BUILD SUCCESSFUL"
 fi
@@ -220,7 +220,7 @@ if [[ ! -e "$LEXEVS_REMOTE_ARTIFACT" ]];
 then 
 	echo "LEXEVS REMOTE API BUILD FAILED "
 	shutdownBuild
-	exit
+	exit 1
 else
 	echo "LEXEVS REMOTE API BUILD SUCCESSFUL"
 fi
@@ -251,7 +251,7 @@ else
 	then 
 		echo "LEXEVS CTS2 BUILD FAILED "
 		shutdownBuild
-		exit
+		exit 1
 	else
 		echo "LEXEVS CTS2 BUILD SUCCESSFUL"
 	fi
