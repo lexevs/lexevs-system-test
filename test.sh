@@ -115,7 +115,7 @@ mkdir $ROOT_DIR/lexevs-cts2/artifacts
 #*****************************************************************
 # Artifacts that are built and tested to exist
 #*****************************************************************
-LEXEVS_ARTIFACT="$ROOT_DIR/build/lexevs/runtime-components/lexbig1.jar"
+LEXEVS_ARTIFACT="$ROOT_DIR/build/lexevs/runtime-components/lexbig.jar"
 URI_RESOLVER_ARTIFACT="$ROOT_DIR/build/artifacts/uriresolver.war"
 LEXEVS_REMOTE_ARTIFACT="$ROOT_DIR/build/artifacts/lexevsapi65.war"
 LEXEVS_CTS2_ARTIFACT="$ROOT_DIR/build/artifacts/lexevscts2.war"
