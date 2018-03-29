@@ -537,7 +537,7 @@ describe('CTS2 integration tests', function() {
 			.expect('header','content-type', 'application/json;charset=UTF-8')
 			.expect('json', 'ResolvedValueSetDirectory', {
            	 	complete: "COMPLETE",
-           	 	numEntries: 8
+           	 	numEntries: 11
          	})
          	.expect('json', 'ResolvedValueSetDirectory.entry.?', {
            	 	resolvedValueSetURI: "SRITEST:AUTO:AllDomesticButGM",
