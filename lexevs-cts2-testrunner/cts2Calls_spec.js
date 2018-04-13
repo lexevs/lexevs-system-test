@@ -11,7 +11,7 @@ var frisby = require('frisby');
 
 const Joi = frisby.Joi; // Frisby exposes Joi for convenience
 
-var cts2Version = '1.3.3.FINAL';
+var cts2Version = '1.3.3.1.FINAL';
 
 var timeoutSeconds = 1000 * 10;
 
