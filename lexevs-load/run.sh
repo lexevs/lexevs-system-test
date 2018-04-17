@@ -40,4 +40,4 @@ chmod 777 *
 
 ./SourceAssertedValueSetDefinitionLoad.sh -cs "owl2lexevs" -v "0.1.5" -a "Concept_In_Subset" -t "true" -uri "http://evs.nci.nih.gov/valueset/" -o "NCI" -s "Contributing_Source"
 
-./BuildAssertedValueSetIndex.sh -u "http://ncicb.nci.nih.gov/xml/owl/EVS/owl2lexevs.owl" -v "0.1.5" -f
+./BuildResolvedAndAssertedValueSetIndexes.sh -u "http://ncicb.nci.nih.gov/xml/owl/EVS/owl2lexevs.owl" -v "0.1.5" -f
