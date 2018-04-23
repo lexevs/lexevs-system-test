@@ -205,22 +205,37 @@ else
 	echo "LexEVS BUILD SUCCESSFUL"
 fi
 
-# If the URI Resolver artifact didn't build successfully, then exit 
+#*****************************************************************
+# If the URI Resolver artifact didn't build successfully 
+# (artifact not present) AND user is not skipping cts2, 
+# then exit with error. 
+#*****************************************************************
 if [[ ! -e "$URI_RESOLVER_ARTIFACT" ]];
+
 then 
-	echo "URIRESOLVER BUILD FAILED "
-	shutdownBuild
-	exit 1
+	if [[ "$TEST_OPTIONS" !=  *"-skipCts2"* ]];
+	then
+		echo "URIRESOLVER BUILD FAILED (no -skipCts2 option set)"
+		shutdownBuild
+		exit 1
+	else
+		echo "URIRESOLVER BUILD SKIPPED"
+	fi
 else
-	echo "URIRESOLVER BUILD SUCCESSFUL"
+	echo "URIRESOLVER BUILD SUCCESSFUL (or skipped)"
 fi
 
 # If the lexevs remote API artifact didn't build successfully, then exit 
 if [[ ! -e "$LEXEVS_REMOTE_ARTIFACT" ]];
 then 
-	echo "LEXEVS REMOTE API BUILD FAILED "
-	shutdownBuild
-	exit 1
+	if [[ "$TEST_OPTIONS" !=  *"-skipRemote"* ]];
+	then
+		echo "LEXEVS REMOTE API BUILD FAILED (no -skipRemote set)"
+		shutdownBuild
+		exit 1
+	else
+		echo "LEXEVS REMOTE API BUILD SKIPPED"
+	fi
 else
 	echo "LEXEVS REMOTE API BUILD SUCCESSFUL"
 fi
@@ -249,11 +264,14 @@ else
 	# If the lexevs CTS2 artifact didn't build successfully, then exit 
 	if [[ ! -e "$LEXEVS_CTS2_ARTIFACT" ]];
 	then 
-		echo "LEXEVS CTS2 BUILD FAILED "
-		shutdownBuild
-		exit 1
-	else
-		echo "LEXEVS CTS2 BUILD SUCCESSFUL"
+		if [[ "$TEST_OPTIONS" !=  *"-skipCts2"* ]];
+		then
+			echo "LEXEVS CTS2 BUILD FAILED (no -skipCts2 option set)"
+			shutdownBuild
+			exit 1
+		else
+			echo "LEXEVS CTS2 BUILD SUCCESSFUL"
+		fi 
 	fi
 fi
 
@@ -282,7 +300,7 @@ cd ..
 #*****************************************************************
 if [[ "$TEST_OPTIONS" == *"-skipRemote"* ]];
 then
-	echo "** SKIP LEXEVS-REMOTE.  LEXEVS-REMTOE container will not be built. **"; 
+	echo "** SKIP LEXEVS-REMOTE. LEXEVS-REMTOE container will not be built. **"; 
 else
 	cd lexevs-remote
 	docker build --tag $TAG_REMOTE_API .
