@@ -4,7 +4,7 @@ cd /lexevs-remote/LexEVSService/test
 
 export ANT_OPTS="-Dhttps.protocols=TLSv1.1,TLSv1.2 -Dforce.http.jre.executor=true -Xmx3072m -XX:MaxPermSize=752m"
 
-ant
+ant alltests
 
 mkdir /results/remote-api/
 

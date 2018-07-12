@@ -12,7 +12,7 @@ chmod 777 *
 
 ./LoadOWL2.sh -in ../test/resources/testData/camera.owl -a
 
-./LoadOWL2.sh -in ../test/resources/testData/owl2/owl2-test-cases-Primitive-Annotated.owl -a
+./LoadOWL2.sh -in ../test/resources/testData/owl2/owl2-special-cases-Defined-Annotated.owl -a -t "PRODUCTION"
 
 ./LoadOBO.sh -in ../test/resources/testData/cell.obo -a
 
@@ -28,10 +28,16 @@ chmod 777 *
 
 ./LoadLgXML.sh -in ../test/resources/testData/valueDomain/VDForOneChild.xml
 
-./LoadResolvedValueSetDefinition.sh -u "SRITEST:AUTO:AllDomesticButGM" -a
+./LoadResolvedValueSetDefinition.sh -u "SRITEST:AUTO:AllDomesticButGM" -vsVersion "12.03test" -a
 
 ./LoadResolvedValueSetDefinition.sh -u "SRITEST:AUTO:AllDomesticButGMWithlt250charName" -a
+
+./LoadResolvedValueSetDefinition.sh -u "XTEST:One.Node.ValueSet" -vsVersion "1.0" -a
 
 ./LoadLgXML.sh -in ../test/resources/testData/valueDomain/VSD_OWL2Annotations.xml -a
 
 ./SupplementScheme.sh -r -parentUri "urn:oid:11.11.0.1" -parentVersion "1.0" -supplementUri "urn:oid:11.11.0.1.1-extension" -supplementVersion "1.0-extension"
+
+./SourceAssertedValueSetDefinitionLoad.sh -cs "owl2lexevs" -v "0.1.5" -a "Concept_In_Subset" -t "true" -uri "http://evs.nci.nih.gov/valueset/" -o "NCI" -s "Contributing_Source"
+
+./BuildResolvedAndAssertedValueSetIndexes.sh -u "http://ncicb.nci.nih.gov/xml/owl/EVS/owl2lexevs.owl" -v "0.1.5" -f
