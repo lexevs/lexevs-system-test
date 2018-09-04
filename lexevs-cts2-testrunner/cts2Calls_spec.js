@@ -16,8 +16,8 @@ var cts2Version = '1.3.6.RC1';
 var timeoutSeconds = 1000 * 10;
 
 // Get the parameter passed in from the command line
-var baseURL = 'http://localhost:8080/lexevscts2/';
-//var baseURL = process.env['baseURL'];
+//var baseURL = 'http://localhost:8888/cts2_65/';
+var baseURL = process.env['baseURL'];
 console.log("Working with CTS2 baseURL:" + baseURL);
 
 
