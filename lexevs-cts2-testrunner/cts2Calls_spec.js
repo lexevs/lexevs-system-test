@@ -11,7 +11,7 @@ var frisby = require('frisby');
 
 const Joi = frisby.Joi; // Frisby exposes Joi for convenience
 
-var cts2Version = '1.3.6.RC1';
+var cts2Version = '1.3.6.FINAL';
 
 var timeoutSeconds = 1000 * 10;
 
@@ -705,7 +705,7 @@ describe('CTS2 integration tests', function() {
            	 	resourceName: 'Automobiles:C0001',
            	 	resourceName: 'Automobiles:005',
            	 	resourceName: 'Automobiles:Ford',
-           	 	resourceName: 'Automobiles_Different_NS:C0002',
+           	 	resourceName: 'Automobiles:C0002',
          	})
          	.expect('json', 'MapEntryDirectory.entry.?.mapFrom', {
            	 	uri: 'urn:oid:11.11.0.1:Jaguar',
@@ -734,7 +734,7 @@ describe('CTS2 integration tests', function() {
          	})
          	.expect('json', 'MapEntryDirectory.entry.?.mapFrom', {
            	 	uri: 'urn:oid:11.11.0.1:C0002',
-           	 	namespace: 'Automobiles_Different_NS',
+           	 	namespace: 'Automobiles',
            	 	name: 'C0002',
          	})
             .done(done);
