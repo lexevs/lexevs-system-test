@@ -16,8 +16,8 @@ var cts2Version = '1.3.6.RC1';
 var timeoutSeconds = 1000 * 10;
 
 // Get the parameter passed in from the command line
-//var baseURL = 'http://localhost:8888/cts2_65/';
-var baseURL = process.env['baseURL'];
+var baseURL = 'http://localhost:8080/lexevscts2/';
+//var baseURL = process.env['baseURL'];
 console.log("Working with CTS2 baseURL:" + baseURL);
 
 
@@ -537,7 +537,7 @@ describe('CTS2 integration tests', function() {
 			.expect('header','content-type', 'application/json;charset=UTF-8')
 			.expect('json', 'ResolvedValueSetDirectory', {
            	 	complete: "COMPLETE",
-           	 	numEntries: 7
+           	 	numEntries: 8
          	})
          	.expect('json', 'ResolvedValueSetDirectory.entry.?', {
            	 	resolvedValueSetURI: "SRITEST:AUTO:AllDomesticButGM",
