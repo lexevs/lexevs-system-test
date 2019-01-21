@@ -546,6 +546,58 @@ describe('CTS2 integration tests', function() {
             .done(done);
 		}, timeoutSeconds);
 
+
+//*********************************************************************
+// resolved valuesets - search specific pre-resolved value set definition
+//*********************************************************************
+	it('CTS2 REST call: resolvedvaluesets - search specific pre-resolved value set definition', function (done) {
+	  	frisby
+        .timeout(timeoutSeconds)
+        .get(baseURL + 'valueset/Black/definition/4f2a3e85/resolution/1?format=json')
+	    	.expect('status', 200)
+			.expect('header','content-type', 'application/json;charset=UTF-8')
+			.expect('json', 'IteratableResolvedValueSet', {
+           	 	complete: "COMPLETE",
+           	 	numEntries: 2
+         	})
+         	.expect('json', 'IteratableResolvedValueSet.resolutionInfo.resolutionOf.valueSetDefinition', {
+           	 	uri: "http://evs.nci.nih.gov/valueset/TEST/C48323"           	 	
+         	})   
+         	.expect('json', 'IteratableResolvedValueSet.entry.?', {
+           	 	uri: "http://ncicb.nci.nih.gov/xml/owl/EVS/owl2lexevs.owl#C99998",
+           	 	uri: "http://ncicb.nci.nih.gov/xml/owl/EVS/owl2lexevs.owl#C99999"           	 	
+         	})   
+            .done(done);
+		}, timeoutSeconds);
+
+
+//*********************************************************************
+// resolved valuesets - search specific pre-resolved value set definition
+//*********************************************************************
+	it('CTS2 REST call: resolvedvaluesets - search specific pre-resolved value set definition', function (done) {
+	  	frisby
+        .timeout(timeoutSeconds)
+        .get(baseURL + 'valueset/All Domestic Autos But GM/definition/13ff5406/resolution/1?format=json')
+	    	.expect('status', 200)
+			.expect('header','content-type', 'application/json;charset=UTF-8')
+			.expect('json', 'IteratableResolvedValueSet', {
+           	 	complete: "COMPLETE",
+           	 	numEntries: 6
+         	})
+         	.expect('json', 'IteratableResolvedValueSet.resolutionInfo.resolutionOf.valueSetDefinition', {
+           	 	uri: "SRITEST:AUTO:AllDomesticButGM"           	 	
+         	})   
+         	.expect('json', 'IteratableResolvedValueSet.entry.?', {
+           	 	uri: "urn:oid:11.11.0.1:Ford",
+           	 	uri: "urn:oid:11.11.0.1:005",
+           	 	uri: "urn:oid:11.11.0.1:Jaguar",
+           	 	uri: "urn:oid:11.11.0.1:B",
+           	 	uri: "urn:oid:11.11.0.1:A",
+           	 	uri: "urn:oid:11.11.0.1:C"         	 	
+         	})   
+            .done(done);
+		}, timeoutSeconds);
+
 //*********************************************************************
 // maps - search map version summaries (empty search)
 //*********************************************************************
@@ -655,7 +707,7 @@ describe('CTS2 integration tests', function() {
 //*********************************************************************
 // maps - read spoecific version of a map by map id
 //*********************************************************************
-	it('CTS2 REST call: maps - read spoecific version of a map by map id', function (done) {
+	it('CTS2 REST call: maps - read specific version of a map by map id', function (done) {
 	  	frisby
         .timeout(timeoutSeconds)    
         .get(baseURL + 'map/Mapping Sample/version/Mapping Sample-1.0?format=json')
