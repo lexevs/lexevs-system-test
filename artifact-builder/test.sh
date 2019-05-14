@@ -17,7 +17,7 @@ cp /mysql-connector-java-5.1.37.jar /build/lexevs/lbPackager/antbuild/runtime/sq
 cp -r /build/lexevs/lbPackager/antbuild/* /lexevs/
 cp -f /lbconfig.props /lexevs/resources/config/
 cp /mysql-connector-java-5.1.37.jar /lexevs/runtime/sqlDrivers
-
+echo "****** done building lexevs";
 
 #
 # If -skipRemote, then we don't need to build the lexevs-remote
@@ -37,6 +37,7 @@ else
         cp output/lexevsapi65/package/webapp/*.tomcat.war /lexevs-remote-local/lexevsapi65.war && \
     	mv output/lexevsapi65/package/webapp/*.tomcat.war /artifacts/lexevsapi65.war && \
     	cp -r ../* /lexevs-remote/
+    	echo "****** done building remote";
 fi	    
 
 
@@ -57,6 +58,7 @@ else
     	mv target/*.war /artifacts/uriresolver.war && \
     	mkdir /results/uriresolver && \
     	cp -R target/surefire-reports/* /results/uriresolver/
+    	echo "****** done building uri resolver";
 fi
     
     
