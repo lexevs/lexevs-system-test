@@ -1,7 +1,7 @@
 # Get the base image from NCI. CentOS7 with Tomcat 8.5
 FROM ncidockerhub.nci.nih.gov/cbiit/centos7_tomcat85
 
-USER root
+USER tomcata
 
 ENV PATH $JAVA_HOME/bin:$PATH
 ENV JAVA_TOOL_OPTIONS -Dfile.encoding=UTF8
