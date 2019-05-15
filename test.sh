@@ -319,6 +319,9 @@ else
 	docker build --tag $TAG_REMOTE_API .
 	docker push $TAG_REMOTE_API
 	LEXEVS_REMOTE_CONTAINER=$(docker run -d --name lexevs-remote -p 8000:8080 -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/artifacts:/artifacts --link mysql:mysql $TAG_REMOTE_API)
+	
+	echo "**  DEBUG - LEXEVS-REMOTE CONTAINER LOGS **";
+	docker logs -f -t lexevs-remote
 	echo "DONE - BUILDING LEXEVS-REMOTE CONTAINER"
 	cd ..
 fi
