@@ -304,7 +304,7 @@ cd ..
 cd lexevs-load
 docker build --tag $TAG_TEST_LOAD .
 docker push $TAG_TEST_LOAD
-docker run --rm -v $ROOT_DIR/build/lexevs:/lexevs --link mysql:mysql lexevs-load
+docker run --rm -v $ROOT_DIR/build/lexevs:/lexevs --link mysql:mysql $TAG_TEST_LOAD
 cd ..
 
 #*****************************************************************
