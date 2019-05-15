@@ -3,10 +3,16 @@
 ROOT_DIR=$(pwd)
 
 # Docker image tags to be created for lexevs artifacts
-TAG_MYSQL=lexevs-mysql:6.5.1
-TAG_URIRESOLVER=lexevs-uriresolver:6.5.1
-TAG_CTS2=lexevs-cts2:6.5.1
-TAG_REMOTE_API=lexevs-remote:6.5.1
+# These images will be on the NCI docker hub 
+#TAG_MYSQL=lexevs-mysql:6.5.21
+TAG_MYSQL=ncidockerhub.nci.nih.gov/lexevs/lexevs-nci-mysql:5.6.33
+#TAG_URIRESOLVER=lexevs-uriresolver:6.5.2
+TAG_URIRESOLVER=ncidockerhub.nci.nih.gov/lexevs/lexevs-uriresolver:6.5.2
+#TAG_CTS2=lexevs-cts2:6.5.2
+TAG_CTS2=ncidockerhub.nci.nih.gov/lexevs/lexevs-cts2:6.5.2
+#TAG_REMOTE_API=lexevs-remote:6.5.2
+TAG_REMOTE_API=ncidockerhub.nci.nih.gov/lexevs/lexevs-remote:6.5.2
+TAG_TEST_LOAD=ncidockerhub.nci.nih.gov/lexevs/lexevs-test-load:6.5.2
 
 # Get environment variables from the command line for git branches and git repositories.  
 # Default them if they are not set.
@@ -178,8 +184,10 @@ MAVEN_CONTAINER=$(docker run -d -P --name maven -v ~/.m2:/root/.m2:rw -v ~/.ivy2
 cd mysql
 docker pull ncidockerhub.nci.nih.gov/lexevs/nci-mysql:5.6.33
 docker build --tag $TAG_MYSQL .
+docker push $TAG_MYSQL
 MYSQL_CONTAINER=$(docker run -d --name mysql -e MYSQL_ROOT_PASSWORD=root $TAG_MYSQL)
 MYSQL_TEST_CONTAINER=$(docker run -d --name mysql_test -e MYSQL_ROOT_PASSWORD=root $TAG_MYSQL)
+echo "Tagged and started MySQL containers";
 cd ..
 
 #*****************************************************************
@@ -189,6 +197,7 @@ cd ..
 cd artifact-builder
 docker build -t artifact-builder .
 docker run --rm -v $ROOT_DIR/build/results:/results -e LEXEVS_BRANCH=$LEXEVS_BRANCH -e LEXEVS_REPO=$LEXEVS_REPO -e LEXEVS_REMOTE_BRANCH=$LEXEVS_REMOTE_BRANCH -e LEXEVS_REMOTE_REPO=$LEXEVS_REMOTE_REPO -e URI_RESOLVER_BRANCH=$URI_RESOLVER_BRANCH -e URI_RESOLVER_REPO=$URI_RESOLVER_REPO -e TEST_OPTIONS=$TEST_OPTIONS -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/lexevs-remote:/lexevs-remote -v $ROOT_DIR/build/artifacts:/artifacts -v $ROOT_DIR/lexevs-remote/artifacts:/lexevs-remote-local -v $ROOT_DIR/uriresolver/artifacts:/uriresolver-local --volumes-from maven --link mysql:mysql artifact-builder
+echo "Artifact builder completed";
 cd ..
 
 #*****************************************************************
@@ -249,13 +258,14 @@ then
 	echo "** SKIP CTS2. URIRESOLVER will not be built **"; 
 	echo "** SKIP CTS2. LEXEVS-SERVICE will not be built **"; 
 else
-	echo "** Building URIRESOLVER **"; 
+	echo "Building URIRESOLVER"; 
 	cd uriresolver
 	docker build --tag $TAG_URIRESOLVER .
+	docker push $TAG_URIRESOLVER
 	URIRESOLVER_CONTAINER=$(docker run -d --name uriresolver -p 8001:8080 -v $ROOT_DIR/build/artifacts:/artifacts --link mysql:mysql $TAG_URIRESOLVER)
 	cd ..
 	
-	echo "** Building LEXEVS-SERVICE **"; 
+	echo "Building LEXEVS-SERVICE"; 
 	cd lexevs-cts2-builder
 	docker build -t lexevs-cts2-builder .
 	docker run --rm -e LEXEVS_SERVICE_BRANCH=$LEXEVS_SERVICE_BRANCH -e LEXEVS_SERVICE_REPO=$LEXEVS_SERVICE_REPO -v $ROOT_DIR/build/results:/results -v $ROOT_DIR/lexevs-cts2/artifacts:/lexevs-cts2-local -v $ROOT_DIR/build/artifacts:/artifacts --volumes-from maven -e "uriResolutionServiceUrl=http://uriresolver:8080/uriresolver/" --link uriresolver:uriresolver lexevs-cts2-builder
@@ -275,6 +285,7 @@ else
 	fi
 fi
 
+
 #*****************************************************************
 # Build and run lexevs tests in a Docker container. 
 # Automatically remove the container when it exits. 
@@ -291,7 +302,8 @@ cd ..
 # lexevs cts2 integration tests.  
 #*****************************************************************
 cd lexevs-load
-docker build -t lexevs-load .
+docker build --tag $TAG_TEST_LOAD .
+docker push $TAG_TEST_LOAD
 docker run --rm -v $ROOT_DIR/build/lexevs:/lexevs --link mysql:mysql lexevs-load
 cd ..
 
@@ -302,9 +314,12 @@ if [[ "$TEST_OPTIONS" == *"-skipRemote"* ]];
 then
 	echo "** SKIP LEXEVS-REMOTE. LEXEVS-REMTOE container will not be built. **"; 
 else
+	echo "**  BUILDING LEXEVS-REMOTE CONTAINER **";
 	cd lexevs-remote
 	docker build --tag $TAG_REMOTE_API .
+	docker push $TAG_REMOTE_API
 	LEXEVS_REMOTE_CONTAINER=$(docker run -d --name lexevs-remote -p 8000:8080 -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/artifacts:/artifacts --link mysql:mysql $TAG_REMOTE_API)
+	echo "DONE - BUILDING LEXEVS-REMOTE CONTAINER":
 	cd ..
 fi
 
@@ -319,6 +334,7 @@ then
 else
 	cd lexevs-cts2
 	docker build --tag $TAG_CTS2 .
+	docker push $TAG_CTS2
 	LEXEVS_CTS2_CONTAINER=$(docker run -d --name lexevs-cts2 -p 8002:8080  -e USER_HOME=/home/tomcata  -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/artifacts:/artifacts --link mysql:mysql --link uriresolver:uriresolver $TAG_CTS2)
 	cd ..
 
@@ -366,5 +382,3 @@ echo
 # Build is done. Time to shutdown
 #*****************************************************************
 shutdownBuild
-
-
