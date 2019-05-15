@@ -20,7 +20,7 @@ ADD ./artifacts/lexevsapi65.war /
 ADD --chown=tomcata run.sh /
 RUN chmod 755 /run.sh 
 
-// wait for the DB to be started before running.
+# Wait for the DB to be started before running.
 ENTRYPOINT /wait-for-it.sh mysql:3306 -t 30 && /run.sh 
 
 #ADD ./artifacts/lexevsapi65.war /local/content/tomcat/container/webapps/
