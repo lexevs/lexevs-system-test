@@ -351,8 +351,6 @@ else
 	cd lexevs-remote-testrunner
 	docker build -t lexevs-remote-testrunner .
 	docker run --rm -v $ROOT_DIR/build/lexevs-remote:/lexevs-remote -v $ROOT_DIR/build/results:/results --link lexevs-remote:lexevs-remote lexevs-remote-testrunner
-	echo "**  DEBUG - LEXEVS-REMOTE TEST RUNNER CONTAINER LOGS **";
-	docker logs -f -t lexevs-remote-testrunner
 	
 	cd ..
 fi
