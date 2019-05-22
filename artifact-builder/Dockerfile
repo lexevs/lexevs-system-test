@@ -33,4 +33,4 @@ ADD lbconfig.props /
 ADD test.sh /
 #RUN ["chmod", "+x", "/test.sh"]
 
-CMD bash /test.sh
+CMD bash /test.sh ${LEXEVS_BUILD_ONLY}

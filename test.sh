@@ -2,15 +2,15 @@
 
 ROOT_DIR=$(pwd)
 
+#*****************************************************************
 # Docker image tags to be created for lexevs artifacts
 # These images will be on the NCI docker hub 
-#TAG_MYSQL=lexevs-mysql:6.5.21
+#*****************************************************************
+
+TAG_ARTIFACT_BUILDER=ncidockerhub.nci.nih.gov/lexevs/lexevs-artifact-builder:6.5.2
 TAG_MYSQL=ncidockerhub.nci.nih.gov/lexevs/lexevs-nci-mysql:5.6.33
-#TAG_URIRESOLVER=lexevs-uriresolver:6.5.2
 TAG_URIRESOLVER=ncidockerhub.nci.nih.gov/lexevs/lexevs-uriresolver:6.5.2
-#TAG_CTS2=lexevs-cts2:6.5.2
 TAG_CTS2=ncidockerhub.nci.nih.gov/lexevs/lexevs-cts2:6.5.2
-#TAG_REMOTE_API=lexevs-remote:6.5.2
 TAG_REMOTE_API=ncidockerhub.nci.nih.gov/lexevs/lexevs-remote:6.5.2
 TAG_TEST_LOAD=ncidockerhub.nci.nih.gov/lexevs/lexevs-test-load:6.5.2
 
@@ -195,8 +195,9 @@ cd ..
 # and uri resolver
 #*****************************************************************
 cd artifact-builder
-docker build -t artifact-builder .
-docker run --rm -v $ROOT_DIR/build/results:/results -e LEXEVS_BRANCH=$LEXEVS_BRANCH -e LEXEVS_REPO=$LEXEVS_REPO -e LEXEVS_REMOTE_BRANCH=$LEXEVS_REMOTE_BRANCH -e LEXEVS_REMOTE_REPO=$LEXEVS_REMOTE_REPO -e URI_RESOLVER_BRANCH=$URI_RESOLVER_BRANCH -e URI_RESOLVER_REPO=$URI_RESOLVER_REPO -e TEST_OPTIONS=$TEST_OPTIONS -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/lexevs-remote:/lexevs-remote -v $ROOT_DIR/build/artifacts:/artifacts -v $ROOT_DIR/lexevs-remote/artifacts:/lexevs-remote-local -v $ROOT_DIR/uriresolver/artifacts:/uriresolver-local --volumes-from maven --link mysql:mysql artifact-builder
+docker build --tag $TAG_ARTIFACT_BUILDER .
+docker push $TAG_ARTIFACT_BUILDER
+docker run --rm -v $ROOT_DIR/build/results:/results -e LEXEVS_BRANCH=$LEXEVS_BRANCH -e LEXEVS_REPO=$LEXEVS_REPO -e LEXEVS_REMOTE_BRANCH=$LEXEVS_REMOTE_BRANCH -e LEXEVS_REMOTE_REPO=$LEXEVS_REMOTE_REPO -e URI_RESOLVER_BRANCH=$URI_RESOLVER_BRANCH -e URI_RESOLVER_REPO=$URI_RESOLVER_REPO -e TEST_OPTIONS=$TEST_OPTIONS -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/lexevs-remote:/lexevs-remote -v $ROOT_DIR/build/artifacts:/artifacts -v $ROOT_DIR/lexevs-remote/artifacts:/lexevs-remote-local -v $ROOT_DIR/uriresolver/artifacts:/uriresolver-local --volumes-from maven --link mysql:mysql $TAG_ARTIFACT_BUILDER
 echo "Artifact builder completed";
 cd ..
 
