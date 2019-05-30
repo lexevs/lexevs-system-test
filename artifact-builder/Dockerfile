@@ -8,7 +8,7 @@ RUN apt-get install -y wget
 RUN apt-get install -y git
 
 RUN cd / && \
-    wget http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.3-bin.tar.gz && \
+    wget https://archive.apache.org/dist/ant/binaries/apache-ant-1.9.3-bin.tar.gz && \
     tar xvfvz apache-ant-1.9.3-bin.tar.gz && \
     mv apache-ant-1.9.3 /opt/ant && \
     sh -c 'echo ANT_HOME=/opt/ant >> /etc/environment' && \
