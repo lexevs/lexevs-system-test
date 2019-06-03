@@ -1,27 +1,34 @@
 #!/bin/bash
 
 BUILDDIR='/build'
+LEXEVSDIR='lexevs'
 
 mkdir $BUILDDIR && cd $BUILDDIR
+
+rm -rf /lexevs/*
+echo "****** removing /lexevs sub directories of shared volume";
 
 export MAVEN_OPTS="-Dhttps.protocols=TLSv1.1,TLSv1.2 -Dforce.http.jre.executor=true -Xmx3072m"
 export ANT_OPTS="-Dhttps.protocols=TLSv1.1,TLSv1.2 -Dforce.http.jre.executor=true -Xmx3072m"
  
 echo "branch = " $LEXEVS_BRANCH
-echo "repo   = "  $LEXEVS_REPO
+echo "repo   = " $LEXEVS_REPO
 
 # LexEVS
 git clone --branch $LEXEVS_BRANCH $LEXEVS_REPO && \
     cd lexevs && \
     ant 
     
+echo "done building lexevs";
+
 cp -f /lbconfig.props /build/lexevs/lbPackager/antbuild/resources/config
 cp /mysql-connector-java-5.1.37.jar /build/lexevs/lbPackager/antbuild/runtime/sqlDrivers
 cp -r /build/lexevs/lbPackager/antbuild/* /lexevs/
 cp -f /lbconfig.props /lexevs/resources/config/
 cp /mysql-connector-java-5.1.37.jar /lexevs/runtime/sqlDrivers
 
-echo "****** done building lexevs";
+chmod -R 775 /lexevs
+echo "change permissions on /lexevs"
 
 if [ "x$LEXEVS_BUILD_ONLY" = "x" ] ; 
 
