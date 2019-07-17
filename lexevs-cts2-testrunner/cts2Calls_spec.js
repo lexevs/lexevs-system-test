@@ -415,7 +415,7 @@ describe('CTS2 integration tests', function() {
 				
 			.expect('json', 'ValueSetCatalogEntryDirectory', {
            	 	complete: "COMPLETE",
-           	 	numEntries: 28
+           	 	numEntries: 29
          	})
          	.expect('json', 'ValueSetCatalogEntryDirectory.entry.?', {
            	 	valueSetName: "Very Sick Cancer Patient",
@@ -537,7 +537,7 @@ describe('CTS2 integration tests', function() {
 			.expect('header','content-type', 'application/json;charset=UTF-8')
 			.expect('json', 'ResolvedValueSetDirectory', {
            	 	complete: "COMPLETE",
-           	 	numEntries: 8
+           	 	numEntries: 9
          	})
          	.expect('json', 'ResolvedValueSetDirectory.entry.?', {
            	 	resolvedValueSetURI: "SRITEST:AUTO:AllDomesticButGM",
