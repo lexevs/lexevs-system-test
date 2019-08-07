@@ -11,9 +11,9 @@ var frisby = require('frisby');
 
 const Joi = frisby.Joi; // Frisby exposes Joi for convenience
 
-var cts2Version = '1.3.6.FINAL';
+var cts2Version = '1.3.7.FINAL';
 
-var timeoutSeconds = 1000 * 10;
+var timeoutSeconds = 1000 * 5;
 
 // Get the parameter passed in from the command line
 //var baseURL = 'http://localhost:8888/cts2_65/';
@@ -415,7 +415,7 @@ describe('CTS2 integration tests', function() {
 				
 			.expect('json', 'ValueSetCatalogEntryDirectory', {
            	 	complete: "COMPLETE",
-           	 	numEntries: 28
+           	 	numEntries: 29
          	})
          	.expect('json', 'ValueSetCatalogEntryDirectory.entry.?', {
            	 	valueSetName: "Very Sick Cancer Patient",
@@ -537,7 +537,7 @@ describe('CTS2 integration tests', function() {
 			.expect('header','content-type', 'application/json;charset=UTF-8')
 			.expect('json', 'ResolvedValueSetDirectory', {
            	 	complete: "COMPLETE",
-           	 	numEntries: 8
+           	 	numEntries: 9
          	})
          	.expect('json', 'ResolvedValueSetDirectory.entry.?', {
            	 	resolvedValueSetURI: "SRITEST:AUTO:AllDomesticButGM",
@@ -562,6 +562,30 @@ describe('CTS2 integration tests', function() {
          	})
          	.expect('json', 'IteratableResolvedValueSet.resolutionInfo.resolutionOf.valueSetDefinition', {
            	 	uri: "http://evs.nci.nih.gov/valueset/TEST/C48323"           	 	
+         	})   
+         	.expect('json', 'IteratableResolvedValueSet.entry.?', {
+           	 	uri: "http://ncicb.nci.nih.gov/xml/owl/EVS/owl2lexevs.owl#C99998",
+           	 	uri: "http://ncicb.nci.nih.gov/xml/owl/EVS/owl2lexevs.owl#C99999"           	 	
+         	})   
+            .done(done);
+		}, timeoutSeconds);
+
+//*********************************************************************
+// resolved valuesets - search specific pre-resolved value set definition
+// test for resolved valueset with different parent (FDA)
+//*********************************************************************
+	it('CTS2 REST call: resolvedvaluesets - search specific pre-resolved value set definition', function (done) {
+	  	frisby
+        .timeout(timeoutSeconds)
+        .get(baseURL + 'valueset/Black/definition/22cf2d7/resolution/1?format=json')
+	    	.expect('status', 200)
+			.expect('header','content-type', 'application/json;charset=UTF-8')
+			.expect('json', 'IteratableResolvedValueSet', {
+           	 	complete: "COMPLETE",
+           	 	numEntries: 2
+         	})
+         	.expect('json', 'IteratableResolvedValueSet.resolutionInfo.resolutionOf.valueSetDefinition', {
+           	 	uri: "http://evs.nci.nih.gov/valueset/FDA/C48323"           	 	
          	})   
          	.expect('json', 'IteratableResolvedValueSet.entry.?', {
            	 	uri: "http://ncicb.nci.nih.gov/xml/owl/EVS/owl2lexevs.owl#C99998",
