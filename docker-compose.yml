@@ -1,0 +1,58 @@
+version: "3.7"
+
+services:
+  mysql:
+    build: ./mysql
+#    image: ncidockerhub.nci.nih.gov/lexevs/lexevs-nci-mysql:5.6.33
+    image: ${IMAGE_MYSQL}
+    volumes:
+      - ${PWD}/build/lexevs:/lexevs
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      LOAD_LEXEVS_DB: ${LOAD_LEXEVS_DB}
+
+#  lexevs-test-load:
+#    image: ncidockerhub.nci.nih.gov/lexevs/lexevs-test-load:6.5.2
+#    volumes:
+#      - /Users/endlecm/git/lexevs-system-test/build/lexevs:/lexevs
+
+  uriresolver:
+#    image: ncidockerhub.nci.nih.gov/lexevs/lexevs-uriresolver:6.5.2
+    image: ${IMAGE_URIRESOLVER}
+    build: ./uriresolver
+    ports:
+      - 8001:8080
+  #  volumes:
+  #    - /Users/endlecm/git/lexevs-system-test/build/artifacts:/artifacts
+    depends_on:
+      - mysql
+
+  lexevs-remote:
+#    image: ncidockerhub.nci.nih.gov/lexevs/lexevs-remote:6.5.2
+    image: ${IMAGE_REMOTE_API}
+    ports:
+      - 8000:8080
+    volumes:
+      - ${PWD}/build/lexevs:/lexevs
+    links:
+      - mysql:mysql
+    depends_on:
+      - mysql
+#    command: ["/wait-for-it.sh", "mysql:3306", "--", "/usr/bin/sh", "/run.sh"]
+
+  lexevs-cts2:
+#    image: ncidockerhub.nci.nih.gov/lexevs/lexevs-cts2:6.5.2
+    image: ${IMAGE_CTS2}
+    build: ./lexevs-cts2
+    ports:
+      - 8002:8080
+    volumes:
+      - ${PWD}/build/lexevs:/lexevs
+    environment:
+      USER_HOME: ${USER_HOME}
+    links:
+      - mysql:mysql
+      - uriresolver:uriresolver
+    depends_on:
+      - mysql
+      - uriresolver

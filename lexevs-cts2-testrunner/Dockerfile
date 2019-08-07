@@ -1,4 +1,4 @@
-FROM node:6.11
+FROM node:8.16.0
 
 RUN apt-get update  && \
 	npm install frisby@2.0.11 --save-dev   && \
