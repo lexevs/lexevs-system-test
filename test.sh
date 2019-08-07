@@ -7,12 +7,12 @@ ROOT_DIR=$(pwd)
 # These images will be on the NCI docker hub 
 #*****************************************************************
 
-TAG_ARTIFACT_BUILDER=ncidockerhub.nci.nih.gov/lexevs/lexevs-artifact-builder:6.5.3
+TAG_ARTIFACT_BUILDER=ncidockerhub.nci.nih.gov/lexevs/lexevs-artifact-builder:DEV
 TAG_MYSQL=ncidockerhub.nci.nih.gov/lexevs/lexevs-nci-mysql:5.6.33
-TAG_URIRESOLVER=ncidockerhub.nci.nih.gov/lexevs/lexevs-uriresolver:6.5.3
-TAG_CTS2=ncidockerhub.nci.nih.gov/lexevs/lexevs-cts2:6.5.3
-TAG_REMOTE_API=ncidockerhub.nci.nih.gov/lexevs/lexevs-remote:6.5.3
-TAG_TEST_LOAD=ncidockerhub.nci.nih.gov/lexevs/lexevs-test-load:6.5.3
+TAG_URIRESOLVER=ncidockerhub.nci.nih.gov/lexevs/lexevs-uriresolver:DEV
+TAG_CTS2=ncidockerhub.nci.nih.gov/lexevs/lexevs-cts2:DEV
+TAG_REMOTE_API=ncidockerhub.nci.nih.gov/lexevs/lexevs-remote:DEV
+TAG_TEST_LOAD=ncidockerhub.nci.nih.gov/lexevs/lexevs-test-load:DEV
 
 # Get environment variables from the command line for git branches and git repositories.  
 # Default them if they are not set.
