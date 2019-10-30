@@ -10,3 +10,5 @@ cp -f /lbconfig.props /test/resources/config/
     sh TestRunner.sh -x
 
 cp -R report.* /results/lexevs/
+
+tail -f /lbconfig.props
