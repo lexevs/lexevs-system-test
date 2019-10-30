@@ -154,6 +154,7 @@ function shutdownBuild() {
 	docker stop $MAVEN_CONTAINER
 	docker stop $MYSQL_CONTAINER
 	docker stop $MYSQL_TEST_CONTAINER
+	docker stop $GRAPH_DB_CONTAINER
 	
 	#Determine which containers to remove based on what was built
 	
@@ -171,6 +172,7 @@ function shutdownBuild() {
 	docker rm $MAVEN_CONTAINER
 	docker rm $MYSQL_CONTAINER
 	docker rm $MYSQL_TEST_CONTAINER
+	docker rm $GRAPH_DB_CONTAINER
 } 
 
 #*****************************************************************
@@ -189,6 +191,12 @@ MYSQL_CONTAINER=$(docker run -d --name mysql -e MYSQL_ROOT_PASSWORD=root $TAG_MY
 MYSQL_TEST_CONTAINER=$(docker run -d --name mysql_test -e MYSQL_ROOT_PASSWORD=root $TAG_MYSQL)
 echo "Tagged and started MySQL containers";
 cd ..
+
+
+#*****************************************************************
+# Create the graph DB for testing
+#*****************************************************************
+GRAPH_DB_CONTAINER=$(docker run -d --name graphdb -e ARANGO_ROOT_PASSWORD=lexgrid -p 8529:8529 arangodb)
 
 #*****************************************************************
 # Artifact builder will build lexevs, lexevs-remote, 
@@ -293,7 +301,7 @@ fi
 #*****************************************************************
 cd lexevs-testrunner
 docker build -t lexevs-testrunner .
-docker run --rm -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/results:/results --link mysql_test:mysql_test lexevs-testrunner
+docker run --rm -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/results:/results --link mysql_test:mysql_test --link graphdb:graphdb lexevs-testrunner
 cd ..
 
 #*****************************************************************
