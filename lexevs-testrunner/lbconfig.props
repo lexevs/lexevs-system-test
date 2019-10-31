@@ -244,7 +244,7 @@ LOG_CHANGE=5
 ERASE_LOGS_AFTER=5
 
 ##############################################################################
-# Graph Database Configuration 
+# Graph Database Configuration - remote
 ##############################################################################
 GRAPH_DB_USER=root
 GRAPH_DB_PWD=lexgrid
