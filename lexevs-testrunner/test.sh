@@ -11,4 +11,5 @@ cp -f /lbconfig.props /test/resources/config/
 
 cp -R report.* /results/lexevs/
 
-tail -f /lbconfig.props
+#tail -f /lbconfig.props
+
