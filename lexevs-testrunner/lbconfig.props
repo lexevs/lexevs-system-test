@@ -195,12 +195,7 @@ DB_PASSWORD=root
 #Password encryption can be enabled by setting 'DB_PASSWORD_ENCRYPTED' to true (case insensitive). 
 #Note that, any value other than 'true' is considered false.
 
-#DB_PASSWORD_ENCRYPTED=
-
-############# Graph Database Configuration
-GRAPH_DB_USER=
-GRAPH_DB_PWD=
-GRAPH_DB_PATH=
+DB_PASSWORD_ENCRYPTED=false
 
 ############# Lucene Configuration
 # The number of boolean 'clauses' Lucene will attempt to create for wildcard
@@ -249,7 +244,7 @@ LOG_CHANGE=5
 ERASE_LOGS_AFTER=5
 
 ##############################################################################
-# Graph Database Configuration
+# Graph Database Configuration 
 ##############################################################################
 GRAPH_DB_USER=root
 GRAPH_DB_PWD=lexgrid
