@@ -365,7 +365,7 @@ else
 fi
 
 
-tail -f test.sh
+#tail -f test.sh
 
 #*****************************************************************
 # Debug information.  Output logs from the main containers.
