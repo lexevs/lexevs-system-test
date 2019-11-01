@@ -13,6 +13,7 @@ TAG_URIRESOLVER=ncidockerhub.nci.nih.gov/lexevs/lexevs-uriresolver:DEV
 TAG_CTS2=ncidockerhub.nci.nih.gov/lexevs/lexevs-cts2:DEV
 TAG_REMOTE_API=ncidockerhub.nci.nih.gov/lexevs/lexevs-remote:DEV
 TAG_TEST_LOAD=ncidockerhub.nci.nih.gov/lexevs/lexevs-test-load:DEV
+TAG_GRAPH_DB=arangodb:3.5.0
 
 # Get environment variables from the command line for git branches and git repositories.  
 # Default them if they are not set.
@@ -196,7 +197,7 @@ cd ..
 #*****************************************************************
 # Create the graph DB for testing
 #*****************************************************************
-GRAPH_DB_CONTAINER=$(docker run -d --name graphdb -e ARANGO_ROOT_PASSWORD=lexgrid -p 8529:8529 arangodb)
+GRAPH_DB_CONTAINER=$(docker run -d --name graphdb -e ARANGO_ROOT_PASSWORD=lexgrid -p 8529:8529 $TAG_GRAPH_DB)
 
 #*****************************************************************
 # Artifact builder will build lexevs, lexevs-remote, 
