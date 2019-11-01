@@ -200,8 +200,8 @@ DB_PASSWORD=root
 #graph-db config
 ############# Graph Database Configuration
 GRAPH_DB_USER=root
-GRAPH_DB_PWD=pw
-GRAPH_DB_URL=localhost
+GRAPH_DB_PWD=lexgrid
+GRAPH_DB_URL=graphdb
 GRAPH_DB_PORT=8529
 GRAPH_DB_MAX_CONNECTIONS=200
 GRAPH_DB_CONNECTION_TIMEOUT_LENGTH=60000

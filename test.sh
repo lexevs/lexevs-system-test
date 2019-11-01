@@ -13,6 +13,7 @@ TAG_URIRESOLVER=ncidockerhub.nci.nih.gov/lexevs/lexevs-uriresolver:DEV
 TAG_CTS2=ncidockerhub.nci.nih.gov/lexevs/lexevs-cts2:DEV
 TAG_REMOTE_API=ncidockerhub.nci.nih.gov/lexevs/lexevs-remote:DEV
 TAG_TEST_LOAD=ncidockerhub.nci.nih.gov/lexevs/lexevs-test-load:DEV
+TAG_GRAPH_DB=arangodb:3.5.0
 
 # Get environment variables from the command line for git branches and git repositories.  
 # Default them if they are not set.
@@ -154,6 +155,7 @@ function shutdownBuild() {
 	docker stop $MAVEN_CONTAINER
 	docker stop $MYSQL_CONTAINER
 	docker stop $MYSQL_TEST_CONTAINER
+	docker stop $GRAPH_DB_CONTAINER
 	
 	#Determine which containers to remove based on what was built
 	
@@ -171,6 +173,7 @@ function shutdownBuild() {
 	docker rm $MAVEN_CONTAINER
 	docker rm $MYSQL_CONTAINER
 	docker rm $MYSQL_TEST_CONTAINER
+	docker rm $GRAPH_DB_CONTAINER
 } 
 
 #*****************************************************************
@@ -189,6 +192,12 @@ MYSQL_CONTAINER=$(docker run -d --name mysql -e MYSQL_ROOT_PASSWORD=root $TAG_MY
 MYSQL_TEST_CONTAINER=$(docker run -d --name mysql_test -e MYSQL_ROOT_PASSWORD=root $TAG_MYSQL)
 echo "Tagged and started MySQL containers";
 cd ..
+
+
+#*****************************************************************
+# Create the graph DB for testing
+#*****************************************************************
+GRAPH_DB_CONTAINER=$(docker run -d --name graphdb -e ARANGO_ROOT_PASSWORD=lexgrid -p 8529:8529 $TAG_GRAPH_DB)
 
 #*****************************************************************
 # Artifact builder will build lexevs, lexevs-remote, 
@@ -293,7 +302,7 @@ fi
 #*****************************************************************
 cd lexevs-testrunner
 docker build -t lexevs-testrunner .
-docker run --rm -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/results:/results --link mysql_test:mysql_test lexevs-testrunner
+docker run --rm -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/results:/results --link mysql_test:mysql_test --link graphdb:graphdb lexevs-testrunner
 cd ..
 
 #*****************************************************************
