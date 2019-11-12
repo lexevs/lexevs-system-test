@@ -3,4 +3,4 @@ jasmine-node --config baseURL http://graph-resolve:8080/graph-resolve/ graph-res
 mkdir /results/lexevs-graph-resolve/
 cp -R reports/* /results/lexevs-graph-resolve/
 
-tail -f test.sh
+#tail -f test.sh
