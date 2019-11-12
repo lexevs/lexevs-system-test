@@ -230,7 +230,6 @@ cd ..
 cd lexevs-graph-resolve
 docker build --tag $TAG_GRAPH_RESOLVE .
 docker push $TAG_GRAPH_RESOLVE
-#LEXEVS_GRAPH_RESOLVE_CONTAINER=$(docker run -d --name graph-resolve -p 8005:8080 -e USER_HOME=/home/tomcata -v $ROOT_DIR/build/artifacts:/artifacts --link graphdb:graphdb $TAG_GRAPH_RESOLVE)
 LEXEVS_GRAPH_RESOLVE_CONTAINER=$(docker run -d -ti --name graph-resolve -p 8005:8080 -e USER_HOME=/home/tomcata -v $ROOT_DIR/build/artifacts:/artifacts --link graphdb:graphdb $TAG_GRAPH_RESOLVE)
 cd ..
 
