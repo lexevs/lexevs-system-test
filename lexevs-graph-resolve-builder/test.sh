@@ -14,5 +14,3 @@ git clone -b $LEXEVS_GRAPH_RESOLVE_BRANCH $LEXEVS_GRAPH_RESOLVE_REPO && \
     # copy graph-resolve artifact to local artifacts
     cp target/*.war /lexevs-graph-resolve-local/graph-resolve.war && \
     mv target/*.war /artifacts/graph-resolve.war
-    #mkdir /results/lexevs-graph-resolve 
-    #cp -R target/surefire-reports/* /results/lexevs-graph-resolve/

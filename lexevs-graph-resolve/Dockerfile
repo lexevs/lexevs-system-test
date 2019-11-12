@@ -3,8 +3,7 @@ FROM ncidockerhub.nci.nih.gov/cbiit/centos7_tomcat85
 
 USER root
 
+# Pass in password for graph db.
 ENV JAVA_OPTS=-Dpwd=lexgrid
-
-#ADD setenv.sh /home/tomcata/
 
 ADD ./artifacts/graph-resolve.war /local/content/tomcat/container/webapps
