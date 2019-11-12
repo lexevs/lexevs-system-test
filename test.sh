@@ -218,7 +218,6 @@ GRAPH_DB_CONTAINER=$(docker run -d --name graphdb -e ARANGO_ROOT_PASSWORD=lexgri
 #*****************************************************************
 cd lexevs-graph-resolve-builder
 docker build --tag lexevs-graph-resolve-builder .
-#docker run --rm -v $ROOT_DIR/build/results:/results -e LEXEVS_GRAPH_RESOLVE_BRANCH=$LEXEVS_GRAPH_RESOLVE_BRANCH -e LEXEVS_GRAPH_RESOLVE_REPO=$LEXEVS_GRAPH_RESOLVE_REPO -v $ROOT_DIR/build/artifacts:/artifacts -v $ROOT_DIR/build/lexevs-graph-resolve:/lexevs-graph-resolve -v $ROOT_DIR/lexevs-graph-resolve/artifacts:/lexevs-graph-resolve-local --volumes-from maven lexevs-graph-resolve-builder
 docker run --rm -v $ROOT_DIR/build/results:/results -e LEXEVS_GRAPH_RESOLVE_BRANCH=$LEXEVS_GRAPH_RESOLVE_BRANCH -e LEXEVS_GRAPH_RESOLVE_REPO=$LEXEVS_GRAPH_RESOLVE_REPO -v $ROOT_DIR/build/artifacts:/artifacts -v $ROOT_DIR/lexevs-graph-resolve/artifacts:/lexevs-graph-resolve-local --volumes-from maven lexevs-graph-resolve-builder
 echo lexevs-graph-resolve-builder completed
 cd ..
