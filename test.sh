@@ -342,16 +342,6 @@ cd ..
 
 
 #*****************************************************************
-# lexevs-graph-resolve-testrunner will test the graph-resolve 
-# REST service.
-#*****************************************************************
-cd lexevs-graph-resolve-testrunner
-docker build -t lexevs-graph-resolve-testrunner .
-docker run --rm -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/results:/results --link graph-resolve:graph-resolve lexevs-graph-resolve-testrunner
-cd ..
-
-
-#*****************************************************************
 # Create a Docker container for lexevs and connects to the mysql
 # container.  This will load terminologies via the lexevs/admin 
 # scripts.  This container will be used for remote API and 
@@ -360,8 +350,19 @@ cd ..
 cd lexevs-load
 docker build --tag $TAG_TEST_LOAD .
 docker push $TAG_TEST_LOAD
-docker run --rm -v $ROOT_DIR/build/lexevs:/lexevs --link mysql:mysql $TAG_TEST_LOAD
+docker run --rm -v $ROOT_DIR/build/lexevs:/lexevs --link mysql:mysql --link graphdb:graphdb $TAG_TEST_LOAD
 cd ..
+
+
+#*****************************************************************
+# lexevs-graph-resolve-testrunner will test the graph-resolve 
+# REST service.
+#*****************************************************************
+cd lexevs-graph-resolve-testrunner
+docker build -t lexevs-graph-resolve-testrunner .
+docker run --rm -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/results:/results --link graph-resolve:graph-resolve lexevs-graph-resolve-testrunner
+cd ..
+
 
 #*****************************************************************
 # Determine if lexevs-remote should be built
