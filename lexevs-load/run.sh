@@ -14,10 +14,6 @@ chmod 777 *
 
 ./LoadOWL2.sh -in ../test/resources/testData/owl2/owl2-special-cases-Defined-Annotated.owl -a -t "PRODUCTION"
 
-./SourceAssertedValueSetDefinitionLoad.sh -cs "owl2lexevs" -v "0.1.5" -a "Concept_In_Subset" -t "true" -uri "http://evs.nci.nih.gov/valueset/" -o "NCI" -s "Contributing_Source"
-
-./BuildResolvedAndAssertedValueSetIndexes.sh -u "http://ncicb.nci.nih.gov/xml/owl/EVS/owl2lexevs.owl" -v "0.1.5" -f
-
 ./LoadOBO.sh -in ../test/resources/testData/cell.obo -a
 
 ./LoadOBO.sh -in ../test/resources/testData/fungal_anatomy.obo -a
@@ -42,8 +38,8 @@ chmod 777 *
 
 ./SupplementScheme.sh -r -parentUri "urn:oid:11.11.0.1" -parentVersion "1.0" -supplementUri "urn:oid:11.11.0.1.1-extension" -supplementVersion "1.0-extension"
 
-#./SourceAssertedValueSetDefinitionLoad.sh -cs "owl2lexevs" -v "0.1.5" -a "Concept_In_Subset" -t "true" -uri "http://evs.nci.nih.gov/valueset/" -o "NCI" -s "Contributing_Source"
+./SourceAssertedValueSetDefinitionLoad.sh -cs "owl2lexevs" -v "0.1.5" -a "Concept_In_Subset" -t "true" -uri "http://evs.nci.nih.gov/valueset/" -o "NCI" -s "Contributing_Source"
 
-#./BuildResolvedAndAssertedValueSetIndexes.sh -u "http://ncicb.nci.nih.gov/xml/owl/EVS/owl2lexevs.owl" -v "0.1.5" -f
+./BuildResolvedAndAssertedValueSetIndexes.sh -u "http://ncicb.nci.nih.gov/xml/owl/EVS/owl2lexevs.owl" -v "0.1.5" -f
 
-./LoadGraphDb.sh -in http://ncicb.nci.nih.gov/xml/owl/EVS/owl2lexevs.owl -v 0.1.5
+#./LoadGraphDb.sh -in http://ncicb.nci.nih.gov/xml/owl/EVS/owl2lexevs.owl -v 0.1.5
