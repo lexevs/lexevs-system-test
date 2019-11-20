@@ -1,5 +1,5 @@
 # Get the base image to Ubuntu
-FROM ubuntu:18.04
+FROM ubuntu:16.04
 
 RUN apt-get update && apt-get clean
 
