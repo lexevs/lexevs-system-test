@@ -42,4 +42,4 @@ chmod 777 *
 
 ./BuildResolvedAndAssertedValueSetIndexes.sh -u "http://ncicb.nci.nih.gov/xml/owl/EVS/owl2lexevs.owl" -v "0.1.5" -f
 
-#./LoadGraphDb.sh -in http://ncicb.nci.nih.gov/xml/owl/EVS/owl2lexevs.owl -v 0.1.5
+./LoadGraphDb.sh -in http://ncicb.nci.nih.gov/xml/owl/EVS/owl2lexevs.owl -v 0.1.5
