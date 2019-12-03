@@ -337,7 +337,7 @@ fi
 #*****************************************************************
 cd lexevs-testrunner
 docker build -t lexevs-testrunner .
-docker run --rm -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/results:/results --link mysql_test:mysql_test --link graphdb:graphdb lexevs-testrunner
+docker run --rm -v $ROOT_DIR/build/lexevs:/lexevs -v $ROOT_DIR/build/results:/results --link mysql_test:mysql_test --link graphdb:graphdb --link graph-resolve:graph-resolve lexevs-testrunner
 cd ..
 
 
