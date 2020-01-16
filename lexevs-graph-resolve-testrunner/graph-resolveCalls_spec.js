@@ -11,7 +11,7 @@ var frisby = require('frisby');
 
 const Joi = frisby.Joi; // Frisby exposes Joi for convenience
 
-var timeoutSeconds = 1000 * 1;
+var timeoutSeconds = 5000 * 1;
 
 // Get the parameter passed in from the command line
 var baseURL = process.env['baseURL'];
