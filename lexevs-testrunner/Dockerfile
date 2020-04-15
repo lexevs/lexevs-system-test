@@ -15,4 +15,6 @@ ADD test.sh /
 
 ADD lbconfig.props /
 
+ADD test.properties /
+
 CMD sh /test.sh
