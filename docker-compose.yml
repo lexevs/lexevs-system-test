@@ -3,7 +3,7 @@ version: "3.7"
 services:
   mysql:
     build: ./mysql
-#    image: ncidockerhub.nci.nih.gov/lexevs/lexevs-nci-mysql:5.6.33
+#    image: ncidockerhub.nci.nih.gov/lexevs/lexevs-nci-mysql:5.7.34
     image: ${IMAGE_MYSQL}
     volumes:
       - ${PWD}/build/lexevs:/lexevs

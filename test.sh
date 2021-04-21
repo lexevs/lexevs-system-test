@@ -8,7 +8,7 @@ ROOT_DIR=$(pwd)
 #*****************************************************************
 
 TAG_ARTIFACT_BUILDER=ncidockerhub.nci.nih.gov/lexevs/lexevs-artifact-builder:DEV
-TAG_MYSQL=ncidockerhub.nci.nih.gov/lexevs/lexevs-nci-mysql:5.6.33
+TAG_MYSQL=ncidockerhub.nci.nih.gov/lexevs/lexevs-nci-mysql:5.7.34
 TAG_URIRESOLVER=ncidockerhub.nci.nih.gov/lexevs/lexevs-uriresolver:DEV
 TAG_CTS2=ncidockerhub.nci.nih.gov/lexevs/lexevs-cts2:DEV
 TAG_REMOTE_API=ncidockerhub.nci.nih.gov/lexevs/lexevs-remote:DEV
@@ -198,7 +198,7 @@ MAVEN_CONTAINER=$(docker run -d -P --name maven -v ~/.m2:/root/.m2:rw -v ~/.ivy2
 # Create two MySQL containers for testing
 #*****************************************************************
 cd mysql
-docker pull ncidockerhub.nci.nih.gov/lexevs/nci-mysql:5.6.33
+docker pull ncidockerhub.nci.nih.gov/lexevs/nci-mysql:5.7.34
 docker build --tag $TAG_MYSQL .
 docker push $TAG_MYSQL
 MYSQL_CONTAINER=$(docker run -d --name mysql -e MYSQL_ROOT_PASSWORD=root $TAG_MYSQL)
