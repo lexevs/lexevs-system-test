@@ -19,6 +19,8 @@ MYSQL_CONTAINER=$(docker run -d --name mysql -e MYSQL_ROOT_PASSWORD=root ncidock
 
 cd ..
 
+read -t 5 -p "I am going to wait for 5 seconds only ..."
+
 echo " -------------------- "
 echo " mysql container is up and running..."
 echo " List of docker containers below."
