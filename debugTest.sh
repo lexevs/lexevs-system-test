@@ -10,6 +10,13 @@ MYSQL_CONTAINER=$(docker run -d --name mysql -e MYSQL_ROOT_PASSWORD=root ncidock
 
 cd ..
 
+echo " -------------------- "
+echo " mysql container is up and running..."
+echo " List of docker containers below."
+
+echo " -------------------- "
+
+docker ps
 
 docker run --rm --link mysql:mysql hello-world 
 
