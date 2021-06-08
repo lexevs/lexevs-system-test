@@ -1,5 +1,14 @@
 docker login -u gfddoaNd -p oWfta1aDFgH/pSGHbSp2+k/23XPCeL7owCLfc4M8E4oQ ncidockerhub.nci.nih.gov
 
+echo "Docker Images\n"
+docker images
+
+echo"---\n"
+echo " Docker containers\n"
+docker ps
+echo "\n"
+
+
 cd mysql
 
 docker pull ncidockerhub.nci.nih.gov/lexevs/nci-mysql:5.7.34
