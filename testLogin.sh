@@ -232,7 +232,6 @@ docker push $TAG_GRAPH_RESOLVE
 LEXEVS_GRAPH_RESOLVE_CONTAINER=$(docker run -d -ti --name graph-resolve -p 8005:8080 -e USER_HOME=/home/tomcata -v $ROOT_DIR/build/artifacts:/artifacts --link graphdb:graphdb $TAG_GRAPH_RESOLVE)
 cd ..
 
-
 #*****************************************************************
 # Artifact builder will build lexevs, lexevs-remote, 
 # and uri resolver
