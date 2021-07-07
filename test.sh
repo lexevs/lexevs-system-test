@@ -234,6 +234,18 @@ cd ..
 
 
 #*****************************************************************
+# Log in to NCI Nexus Docker hub  ** 2nd login - TEST START **
+#*****************************************************************
+LOGIN_RESULT="$(docker login -u $NCI_DOCKER_USER -p $NCI_DOCKER_PW ncidockerhub.nci.nih.gov)"
+
+echo 
+echo $LOGIN_RESULT
+
+#*****************************************************************
+# Log in to NCI Nexus Docker hub  ** 2nd login - TEST  END **
+#*****************************************************************
+
+#*****************************************************************
 # Artifact builder will build lexevs, lexevs-remote, 
 # and uri resolver
 #*****************************************************************
