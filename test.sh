@@ -72,14 +72,6 @@ echo
 echo TEST_OPTIONS          : $TEST_OPTIONS
 echo
 
-#*****************************************************************
-# Verify that the NCI Nexus user name is passed in.  
-# Exit if it is not set.
-#*****************************************************************
-if [ -z "$NCI_DOCKER_USER" ]; 
-	then echo "NCI_DOCKER_USER is no set. Exiting.";
-	exit;	
-fi
 
 #*****************************************************************
 # Verify that the NCI Nexus password is passed in.  
