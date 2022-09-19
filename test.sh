@@ -42,6 +42,9 @@ LEXEVS_GRAPH_RESOLVE_REPO=${10:-https://github.com/lexevs/graph-resolve.git}
 NCI_DOCKER_USER=${11}
 NCI_DOCKER_PW=${12}
 
+NCI_DOCKER_USER=NCI_lexevs_nexus
+NCI_DOCKER_PW=FitRum7?ESput12@Op0u
+
 #
 # Option to skip CTS2 build and tests: -skipCts2
 # Option to skip lexevs-remote API build and tests: -skipRemote
